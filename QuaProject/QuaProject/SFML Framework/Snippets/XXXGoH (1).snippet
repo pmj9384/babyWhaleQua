@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>GameObject Header</Title>
+            <Author>Your Name</Author>
+            <Description>Creates a GameObject Header file template</Description>
+            <Shortcut>xxxgoh</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>classname</ID>
+                    <ToolTip>Enter the class name</ToolTip>
+                    <Default>XXXGo</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="CPP">
+                <![CDATA[#pragma once
+
+class $classname$ : public GameObject
+{
+protected:
+
+public:
+	$classname$(const std::string& name = "");
+	~$classname$() = default;
+
+	void SetPosition(const sf::Vector2f& pos) override;
+	void SetRotation(float angle) override;
+	void SetScale(const sf::Vector2f& scale) override;
+
+	void SetOrigin(Origins preset) override;
+	void SetOrigin(const sf::Vector2f& newOrigin) override;
+
+	void Init() override;
+	void Release() override;
+	void Reset() override;
+	void Update(float dt) override;
+	void Draw(sf::RenderWindow& window) override;
+};
+]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

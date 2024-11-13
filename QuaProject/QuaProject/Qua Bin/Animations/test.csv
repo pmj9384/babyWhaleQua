@@ -1,0 +1,7 @@
+TEXTURE ID,PATH,LEFT,WIDTH,HEIGHT
+RUN,graphics/sprite_sheet.png,11.234234f,120,120
+IDLE,graphics/sprite_sheet.png,120,120,120
+2,graphics/sprite_sheet.png,120,120,120
+4,graphics/sprite_sheet.png,120,120,120
+5,graphics/sprite_sheet.png,120,120,120
+6,graphics/sprite_sheet.png,120,120,120

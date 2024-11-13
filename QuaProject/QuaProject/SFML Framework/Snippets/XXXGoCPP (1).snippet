@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>GameObject Source Code</Title>
+            <Author>Your Name</Author>
+            <Description>Creates a GameObject Source Code file template</Description>
+            <Shortcut>xxxgocpp</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>classname</ID>
+                    <ToolTip>Enter the class name</ToolTip>
+                    <Default>XXXGo</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="CPP">
+                <![CDATA[#include "stdafx.h"
+#include "$classname$.h"
+
+$classname$::$classname$(const std::string& name)
+	: GameObject(name)
+{
+}
+
+void $classname$::SetPosition(const sf::Vector2f& pos)
+{
+	position = pos;
+}
+
+void $classname$::SetRotation(float angle)
+{
+	rotation = angle;
+}
+
+void $classname$::SetScale(const sf::Vector2f& s)
+{
+	scale = s;
+}
+
+void $classname$::SetOrigin(Origins preset)
+{
+	originPreset = preset;
+	if (originPreset != Origins::Custom)
+	{
+
+	}
+}
+
+void $classname$::SetOrigin(const sf::Vector2f& newOrigin)
+{
+	originPreset = Origins::Custom;
+}
+
+void $classname$::Init()
+{
+}
+
+void $classname$::Release()
+{
+}
+
+void $classname$::Reset()
+{
+}
+
+void $classname$::Update(float dt)
+{
+}
+
+void $classname$::Draw(sf::RenderWindow& window)
+{
+}
+]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
