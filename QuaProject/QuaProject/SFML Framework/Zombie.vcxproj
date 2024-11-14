@@ -150,6 +150,8 @@
   <ItemGroup>
     <ClCompile Include="AniPlayer.cpp" />
     <ClCompile Include="AniPlayer2.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyTable.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\DataTable.cpp" />
@@ -183,6 +185,8 @@
   <ItemGroup>
     <ClInclude Include="AniPlayer.h" />
     <ClInclude Include="AniPlayer2.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyTable.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="Framework\Database.hpp" />

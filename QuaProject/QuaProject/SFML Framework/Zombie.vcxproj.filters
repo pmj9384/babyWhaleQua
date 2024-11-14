@@ -78,6 +78,8 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\SpawnArea.hpp">
@@ -178,6 +180,8 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemTable.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyTable.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">

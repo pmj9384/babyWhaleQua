@@ -49,12 +49,12 @@ void Player::Init()
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
 	SetOrigin(Origins::MC);
-
+	SetPosition({1920.f * 0.5f, 1080.f * 0.5f});
 	int maxHp = 100;
 	int hp = maxHp;
-	healthBar.setFillColor(sf::Color::Red);
+	/*healthBar.setFillColor(sf::Color::Red);
 	healthBar.setSize(sf::Vector2f(static_cast<float>(hp) / maxHp * 300.f, 80.f));
-	healthBar.setPosition(position.x - healthBar.getSize().x / 2, position.y + body.getGlobalBounds().height / 2 + 600.f);
+	healthBar.setPosition(position.x - healthBar.getSize().x / 2, position.y + body.getGlobalBounds().height / 2 + 600.f);*/
 }
 
 void Player::Release()
@@ -63,11 +63,13 @@ void Player::Release()
 
 void Player::Reset()
 {
+	sf::Vector2f windowSize(1920.f, 1080.f);
+	sf::Vector2f offset = windowSize * 0.5f;
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
 
 	body.setTexture(TEXTURE_MGR.Get(textureId), true);
 	SetOrigin(originPreset);
-	SetPosition({ 0.f, 0.f });
+	SetPosition({ 500.f,450.f });
 	SetRotation(0.f);
 	direction = { 1.f, 0.f };
 	hp = maxHp; // 체력을 최대치로 리셋
@@ -76,7 +78,6 @@ void Player::Reset()
 
 	maxHealth = 100;
 	runSpeed = 1.0f;
-	healthPickupBonus = 0;
 
 }
 
@@ -89,12 +90,11 @@ void Player::Update(float dt)
 	{
 		 Utils::Normalize(direction);
 	}
+	if (direction.x != 0.f)
+	{
+		SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
+	}
 
-	sf::Vector2i mousePos = InputMgr::GetMousePosition();
-	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
-	look = Utils::GetNormal(mouseWorldPos - position);
-
-	SetRotation(Utils::Angle(look));
 	SetPosition(position + direction * speed * dt);
 
 
@@ -106,7 +106,7 @@ void Player::Update(float dt)
 void Player::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
-	window.draw(healthBar);
+	//window.draw(healthBar);
 	debugBox.Draw(window);
 }
 

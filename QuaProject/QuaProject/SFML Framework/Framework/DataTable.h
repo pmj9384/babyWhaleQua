@@ -5,8 +5,8 @@ public:
 	enum class Types
 	{
 		String,
-		Zombie,
 		Item,
+		Enemy,
 	};
 	static const int TotalTypes = 3;
 

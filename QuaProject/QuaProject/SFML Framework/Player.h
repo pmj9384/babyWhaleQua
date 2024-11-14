@@ -10,7 +10,7 @@ class Player : public GameObject
 {
 protected:
 	sf::Sprite body;
-	std::string textureId = "graphics/player.png";
+	std::string textureId = "graphics/images/91.png";
 
 	sf::Vector2f direction;
 	sf::Vector2f look;
@@ -30,7 +30,7 @@ protected:
 
 	int maxHealth;           // 최대 체력
 	float runSpeed;          // 이동 속도
-	int healthPickupBonus;   // 체력 아이템 효과
+	//int healthPickupBonus;   // 체력 아이템 효과
 
 
 	HitBox* hitBox;

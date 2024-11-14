@@ -41,3 +41,4 @@
 #include "StringTable.h"
 #include "AniPlayer.h"
 #include "ItemTable.h"
+#include "EnemyTable.h"
