@@ -10,6 +10,7 @@
 #include <limits>
 #include <codecvt>
 #include <functional>
+#include <memory>    
 #include "json.hpp"
 #include "Database.hpp"
 

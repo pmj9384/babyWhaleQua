@@ -1,6 +1,6 @@
-ID(0: smallFish 1: redFish 2: blueFish 3: purpleFish 4: shark),TEXTUREID,SPEED_MIN,SPEED_MAX,DAMAGE
-0,graphics/images/2.png,60,80,100
-1,graphics/images/13.png,80,100,10
-2,graphics/images/18.png,50,80,10
-3,graphics/images/25.png,120,150,10
-4,graphics/images/11.png,50,70,0
+ID(0: smallFish 1: redFish 2: blueFish 3: purpleFish 4: shark),TEXTUREID,SPEED,DAMAGE
+0,graphics/images/2.png,60,100
+1,graphics/images/11.png,50,0
+2,graphics/images/13.png,80,10
+3,graphics/images/18.png,70,10
+4,graphics/images/25.png,100,10         

@@ -9,8 +9,7 @@ struct DataEnemy
 	Enemy::Types id;
 
 	std::string textureId;
-	int min_speed = 0;
-	int max_speed = 0;
+	int speed = 0;
 	int damage = 0;
 };
 

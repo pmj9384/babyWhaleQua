@@ -21,9 +21,9 @@ bool EnemyTable::Load()
 
 		table[id].id = id;
 		table[id].textureId = row[1];
-		table[id].min_speed = std::stof(row[2]);
-		table[id].max_speed = std::stof(row[3]);
-		table[id].damage = std::stof(row[4]);
+		table[id].speed = std::stof(row[2]);
+		table[id].damage = std::stof(row[3]);
+
 
 	}
 

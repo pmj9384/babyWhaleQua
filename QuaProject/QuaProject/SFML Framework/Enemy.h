@@ -1,8 +1,9 @@
 #pragma once
 #include "GameObject.h"
-
+#include "SpawnArea.hpp"
 class Player;
 class SceneGame;
+class MovementPattern;
 
 class Enemy :  public GameObject
 {
@@ -23,21 +24,26 @@ protected:
 	sf::Sprite body;
 	std::string textureId;
 	sf::Vector2f direction;
-
+	MovementPattern* movementPattern = nullptr;
 	Player* player = nullptr;
 	SceneGame* scenegame = nullptr;
 
 	int maxHp = 0;
-	float min_speed = 0.f;
-	float max_speed = 0.f;
 	float speed = 0.f;
 	int damage = 0;
 	float attackInterval = 0.f;
 	int hp = 0;
+
+
+
 	float attackTimer = 0.f;
 	bool active = true; // 공격활성화
 	float deactivateTime; // 비활성화 유지 시간
 	float deactivateTimer;
+
+
+	float directionChangeInterval;
+	float directionChangeTimer;
 	float effectTimer = 0.f;
 public:
 	Enemy(const std::string& name = "");
@@ -71,6 +77,15 @@ public:
 	int GetDamage() const { return damage; }
 	bool IsActive() const { return active; }
 	void Deactivate(float duration);
+
+	void SetDirection(const sf::Vector2f& dir);
+
+	void AddMovementPattern(MovementPattern* pattern);
+	sf::Vector2f GetDirection() const;
+	float GetSpeed() const;
+
+	void SetPlayer(Player* p);
+
 
 	/*SaveEnemy GetSaveData()const;
 	void LoadSaveData(const SaveEnemy& data);*/

@@ -80,6 +80,12 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyTable.cpp" />
+    <ClCompile Include="MovementPattern.cpp" />
+    <ClCompile Include="StraightMovement.cpp" />
+    <ClCompile Include="ChaseMovement.cpp" />
+    <ClCompile Include="DashMovement.cpp" />
+    <ClCompile Include="RandomMovement.cpp" />
+    <ClCompile Include="SleepMovement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\SpawnArea.hpp">
@@ -182,6 +188,12 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyTable.h" />
+    <ClInclude Include="MovementPattern.h" />
+    <ClInclude Include="StraightMovement.h" />
+    <ClInclude Include="ChaseMovement.h" />
+    <ClInclude Include="DashMovement.h" />
+    <ClInclude Include="RandomMovement.h" />
+    <ClInclude Include="SleepMovement.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
