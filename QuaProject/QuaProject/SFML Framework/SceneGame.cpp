@@ -27,12 +27,17 @@ void SceneGame::Init()
 	spawn1.SetPosition( -100.0f, 0.0f);
 	spawn1.SetSize(100.f, backgroundSize.y-610);
 	spawn1.SetOrigin(Origins::MC);
-	spawn1.SetDrawable(true); // 테두리 표시
+	spawn1.SetDrawable(false); // 테두리 표시
 
 	spawn2.SetPosition(1920.0f, 0.0f); 
 	spawn2.SetSize(100.f, backgroundSize.y-610);
 	spawn2.SetOrigin(Origins::MC);
-	spawn2.SetDrawable(true); 
+	spawn2.SetDrawable(false); 
+
+	spawn3.SetPosition(1920.0f / 2.0f - 300.f, 1080.0f / 2.0f -200.f); // 화면 중심 설정
+	spawn3.SetSize(1600.0f, 600.0f); // 가로 및 세로 크기 설정
+	spawn3.SetOrigin(Origins::MC);
+	spawn3.SetDrawable(false);
 	Scene::Init();
 }
 
@@ -69,7 +74,10 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);
 
 	static float spawnTimer = 0.f;
-	const float spawnInterval = 1.f; // 2초마다 적 생성
+	static float itemSpawnTimer = 0.f;
+
+	const float spawnInterval = 2.f; // 2초마다 적 생성
+	const float itemSpawnInterval = 5.f;
 
 	spawnTimer += dt;
 	if (spawnTimer >= spawnInterval)
@@ -78,7 +86,12 @@ void SceneGame::Update(float dt)
 		spawnTimer = 0.f;
 	}
 
-
+	itemSpawnTimer += dt;
+	if (itemSpawnTimer >= itemSpawnInterval)
+	{
+		SpawnItem(1); // 한 번에 한 개의 아이템 생성
+		itemSpawnTimer = 0.f;
+	}
 
 }
 
@@ -87,13 +100,28 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 	spawn1.Draw(window); // spawndraw
 	spawn2.Draw(window); // spawndraw
-
+	spawn3.Draw(window);
 }
 
 
 
 void SceneGame::SpawnItem(int count)
 {
+	for (int i = 0; i < count; ++i)
+	{
+		Item* item = itemPool.Take();
+		items.push_back(item);
+
+		Item::Types itemType = (Item::Types)Utils::RandomRange(0, Item::TotalTypes - 1);
+		item->SetType(itemType);
+
+		sf::Vector2f pos;
+		pos = spawn3.Spawn();
+		item->SetPosition(pos);
+
+		AddGo(item);
+		item->SetActive(true);
+	}
 }
 
 void SceneGame::SpawnEnemy(int count)

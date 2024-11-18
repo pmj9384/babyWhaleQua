@@ -15,12 +15,13 @@ protected:
 	std::list<Enemy*> enemys;
 	ObjectPool<Enemy> enemyPool;
 
-
+	std::list<Item*> items;
+	ObjectPool<Item> itemPool;
 
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
-
+	SpawnArea spawn3;
 	SceneGame();
 	virtual ~SceneGame() = default;
 
@@ -38,7 +39,7 @@ public:
 
 
 	void OnPlayerDie(Player* player);
-
+	const std::list<Item*>& GetItemList() const { return items; }
 	void PauseGame();
 	void ResumeGame();
 

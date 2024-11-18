@@ -77,9 +77,11 @@ void Enemy::Release()
 void Enemy::Reset()
 {
 	// scenegame이 nullptr인지 확인하고, nullptr이면 스폰하지 않음
-	if (scenegame == nullptr) {
+	if (scenegame == nullptr) 
+	{
 		scenegame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
-		if (scenegame == nullptr) {
+		if (scenegame == nullptr)
+		{
 			// 만약 scenegame이 nullptr이면 기본 위치 설정 후 반환
 			position = { 0.f, 0.f };
 			direction = sf::Vector2f(1.f, 0.f);
@@ -87,20 +89,19 @@ void Enemy::Reset()
 			return;
 		}
 	}
-
-
-	// 왼쪽 또는 오른쪽 SpawnArea 중 하나에서 스폰 위치 가져오기
-	if (Utils::RandomRange(0, 1) == 0) {
-		position = scenegame->spawn1.Spawn(); // 왼쪽 SpawnArea에서 스폰
+	if (Utils::RandomRange(0, 1) == 0)
+	{
+		position = scenegame->spawn1.Spawn(); 
 		direction = sf::Vector2f(1.f, 0.f); // 오른쪽으로 이동
 	}
-	else {
-		position = scenegame->spawn2.Spawn(); // 오른쪽 SpawnArea에서 스폰
+	else 
+	{
+		position = scenegame->spawn2.Spawn(); 
 		direction = sf::Vector2f(-1.f, 0.f); // 왼쪽으로 이동
 	}
-
 	SetPosition(position);
-	this->direction = direction;
+
+	this->direction = direction; //방향 전환
 	directionChangeTimer = 0.f;
 }
 
@@ -116,9 +117,8 @@ void Enemy::Update(float dt)
 		}
 		if (direction.x != 0.f)
 		{
-			SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
+			SetScale({ direction.x > 0.f ? 1.f : -1.f, 1.f }); // X축 반전
 		}
-
 
 		position += direction * speed * dt;
 		SetPosition(position);
@@ -155,14 +155,15 @@ bool Enemy::IsWithinBounds() const
 
 void Enemy::SetType(Types type)
 {
-
 	this->types = type; // 타입저장
 	const auto& data = ENEMY_TABLE->Get(type);
+
 	textureId = data.textureId;
 	speed = data.speed;
 	damage = data.damage;
-	speed = static_cast<float>(data.speed);
+
 	body.setTexture(TEXTURE_MGR.Get(textureId));
+
 	if (movementPattern)
 	{
 		delete movementPattern;

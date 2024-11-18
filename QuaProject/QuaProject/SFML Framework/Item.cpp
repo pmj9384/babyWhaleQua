@@ -93,7 +93,7 @@ void Item::SetType(Types type)
 
 void Item::OnPickup(Player* player)
 {
-	if (types == Types::Health) 
+	if (types == Types::invincibility)
 	{
 		int healthToAdd = 20; 
 		player->IncreaseHealth(healthToAdd);

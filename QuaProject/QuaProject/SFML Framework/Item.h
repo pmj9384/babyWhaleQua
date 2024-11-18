@@ -8,11 +8,11 @@ class Item : public GameObject
 public:
 	enum class Types
 	{
-		Health,
+		invincibility,
 	};
 	static const int TotalTypes = 1;
 protected:
-	Types types = Types::Health;
+	Types types = Types::invincibility;
 
 	sf::Sprite body;
 	std::string textureId;

@@ -129,7 +129,52 @@ void Player::UpdateHealthBar()
 
 void Player::FixedUpdate(float dt)
 {
-	
+	if (sceneGame == nullptr)
+		return;
+
+
+	const auto& enemyList = sceneGame->GetEnemyList();
+
+	for (auto enemy : enemyList)
+	{
+		if (!enemy->IsActive())
+			continue;
+
+		auto playerPoints = Utils::GetShapePoints(body);
+		auto zombiePoints = Utils::GetShapePoints(enemy->GetBody());
+
+		const sf::Transform& playerTransform = body.getTransform();
+		const sf::Transform& zombieTransform = enemy->GetBody().getTransform();
+		if (Utils::PolygonsIntersect(playerPoints, playerTransform, zombiePoints, zombieTransform))
+		{
+			OnDamage(enemy->GetDamage());  // 좀비의 데미지를 받아 체력 감소
+			enemy->Deactivate(0.2f); // 0.2동안 공격 비활성화
+			enemy->SetActive(false);
+			break;
+		}
+	}
+
+	const auto& itemList = sceneGame->GetItemList();
+
+	for (auto item : itemList)
+	{
+		if (!item->IsActive())
+			continue;
+
+		auto playerPoints = Utils::GetShapePoints(body);
+		auto itemPoints = Utils::GetShapePoints(item->GetBody());
+
+		const sf::Transform& playerTransform = body.getTransform();
+		const sf::Transform& itemTransform = item->GetBody().getTransform();
+
+		if (Utils::PolygonsIntersect(playerPoints, playerTransform, itemPoints, itemTransform))
+		{
+
+			OnPickup(item);  // 아이템을 획득
+			item->SetActive(false);
+			break;
+		}
+	}
 }
 
 void Player::OnDamage(int damageAmount)
