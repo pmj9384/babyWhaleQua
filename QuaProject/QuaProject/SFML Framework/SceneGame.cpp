@@ -2,8 +2,9 @@
 #include "SceneGame.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "wave.h"
 
-SceneGame::SceneGame() : Scene(SceneIds::Game)
+SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
 }
 
@@ -38,11 +39,22 @@ void SceneGame::Init()
 	spawn3.SetSize(1600.0f, 600.0f); // 가로 및 세로 크기 설정
 	spawn3.SetOrigin(Origins::MC);
 	spawn3.SetDrawable(false);
+
+	currentWave = new Wave();            
+	currentWave->SetType(Wave::Types::Wave1); // 첫 번째 웨이브 설정
+	currentWave->StartWave();
+	SetPlayerLevel(1);
+
 	Scene::Init();
 }
 
 void SceneGame::Release()
 {
+	if (currentWave)
+	{
+		delete currentWave; // currentWave 삭제
+		currentWave = nullptr;
+	}
 }
 
 void SceneGame::Enter()
@@ -70,37 +82,54 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-
 	Scene::Update(dt);
 
-	static float spawnTimer = 0.f;
-	static float itemSpawnTimer = 0.f;
-
-	const float spawnInterval = 2.f; // 2초마다 적 생성
-	const float itemSpawnInterval = 5.f;
-
-	spawnTimer += dt;
-	if (spawnTimer >= spawnInterval)
+	if (currentWave)
 	{
-		SpawnEnemy(1); // 한 번에 한 개의 적 생성
-		spawnTimer = 0.f;
-	}
+		currentWave->Update(dt); // 웨이브 상태 갱신
 
-	itemSpawnTimer += dt;
-	if (itemSpawnTimer >= itemSpawnInterval)
-	{
-		SpawnItem(1); // 한 번에 한 개의 아이템 생성
-		itemSpawnTimer = 0.f;
-	}
+		// 적 스폰 처리
+		if (currentWave->CanSpawnEnemy())
+		{
+			SpawnEnemy(1); // 적 스폰
+			currentWave->IncrementSpawnedEnemies();
+		}
 
+		if ( currentWave->IsWaveComplete())
+		{
+			// 기존 웨이브 삭제
+			delete currentWave;
+			currentWave = nullptr;
+
+			// 새로운 웨이브 생성
+			currentWave = new Wave();
+			currentWave->Reset();
+			playerLevel++; // 플레이어 레벨 증가
+			SetPlayerLevel(playerLevel); // 플레이어 레벨에 따라 적 허용 타입 설정
+
+			// 다음 웨이브 타입 설정
+			Wave::Types nextWaveType = static_cast<Wave::Types>(playerLevel);
+			if (nextWaveType <= Wave::Types::Wave10) // 최대 웨이브 확인
+			{
+				currentWave->SetType(nextWaveType);
+				currentWave->StartWave();
+				std::cout << "Started Wave " << static_cast<int>(nextWaveType) << std::endl;
+			}
+			else
+			{
+				std::cout << "No more waves! Game complete!" << std::endl;
+				currentWave = nullptr; // 게임 종료 상태로 전환
+			}
+		}
+	}
 }
-
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
 	spawn1.Draw(window); // spawndraw
 	spawn2.Draw(window); // spawndraw
 	spawn3.Draw(window);
+
 }
 
 
@@ -126,25 +155,22 @@ void SceneGame::SpawnItem(int count)
 
 void SceneGame::SpawnEnemy(int count)
 {
+	if (!currentWave) // currentWave가 유효한지 확인
+		return;
 	for (int i = 0; i < count; ++i)
 	{
 		Enemy* enemy = enemyPool.Take();
 		if (enemy == nullptr)
 		{
 			continue;
-
 		}
 		enemys.push_back(enemy);
-		Enemy::Types enemyType = static_cast<Enemy::Types>(Utils::RandomRange(0, static_cast<int>(Enemy::TotalTypes) - 1));
-		enemy->SetType(enemyType);
 
-		if (player == nullptr)
-		{
-		}
-		else
-		{
-			enemy->SetPlayer(player);
-		}
+		enemy->SetSceneGame(this);
+		Enemy::Types enemyType = currentWave->GetRandomTargetType();
+		enemy->SetType(enemyType);
+		enemy->SetPlayer(player);
+
 
 		// spawn1 또는 spawn2에서 랜덤하게 스폰 위치 선택
 		sf::Vector2f spawnPosition;
@@ -170,10 +196,6 @@ void SceneGame::SpawnEnemy(int count)
 	}
 }
 
-
-
-
-
 void SceneGame::OnPlayerDie(Player* player)
 {
 }
@@ -192,6 +214,107 @@ void SceneGame::CheckWaveCompletion()
 
 void SceneGame::ApplyUpgrade(int selectedUpgrade)
 {
+}
+
+void SceneGame::SetPlayerLevel(int level)
+{
+	std::vector<Enemy::Types> allowedTypes;
+
+	switch (level)
+	{
+	case 1:
+		allowedTypes = { Enemy::Types::smallFish }; // 레벨 1에서는 smallFish만 잡을 수 있음
+		break;
+	case 2:
+		allowedTypes = { Enemy::Types::smallFish };
+		break;
+	case 3:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		break;
+	case 4:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		break;
+	case 5:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		break;
+	case 6:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		break;
+	case 7:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		break;
+	case 8:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+		break;
+	case 9:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+
+		break;
+	case 10:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+
+		break;
+	default:
+		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+		break;
+	}
+
+	player->SetAllowedEnemyTypes(allowedTypes);
+}
+
+void SceneGame::IncrementPlayerLevel()
+{
+	playerLevel++;
+	SetPlayerLevel(playerLevel);
+}
+
+int SceneGame::GetPlayerLevel() const
+{
+	return playerLevel;
+}
+
+void SceneGame::OnEnemyCatch(Enemy* enemy)
+{
+	//if (!enemy->IsActive())
+	//{
+	//	return;
+	//}
+	//int playerDamage = player->GetAttackDamage(); 
+	//enemy->OnDamage(playerDamage); 
+
+	//if (!enemy->IsActive()) // OnDamage 이후 상태 확인
+	//{
+	//	currentWave->EnemyKilled(enemy->GetType());
+	//}
+}
+
+void SceneGame::CheckCollisions()
+{
+	//for (Enemy* enemy : enemys)
+	//{
+	//	if (!enemy->IsActive())
+	//		continue;
+
+	//	if (player->GetGlobalBounds().intersects(enemy->GetGlobalBounds()))
+	//	{
+	//		OnEnemyCatch(enemy); // 적과 충돌 시 처리
+	//		break; // 한 번의 충돌만 처리
+	//	}
+	//}
+
+}
+
+void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
+{
+	if (currentWave)
+	{
+		if (enemyType != Enemy::Types::none)
+		{
+			currentWave->EnemyKilled(enemyType); // 적 처치 카운트 증가
+		}
+	}
+
+
 }
 
 

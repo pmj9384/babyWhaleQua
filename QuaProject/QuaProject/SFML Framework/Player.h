@@ -25,12 +25,13 @@ protected:
 	sf::RectangleShape healthBar;
 	int maxHp = 100;
 	int hp = 100;
-
-
+	int attackDamage = 10;
+	std::vector<Enemy::Types> allowedEnemyTypes;
 
 	int maxHealth;           // 최대 체력
 	float runSpeed;          // 이동 속도
 	//int healthPickupBonus;   // 체력 아이템 효과
+
 
 
 	HitBox* hitBox;
@@ -53,6 +54,9 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 
+	void SetAttackDamage(int damage) { attackDamage = damage; }
+	int GetAttackDamage() const { return attackDamage; }
+	void AttackEnemy(Enemy* enemy);
 	void UpdateHealthBar();
 	void FixedUpdate(float dt) override;
 	void OnDamage(int damageAmount);
@@ -62,6 +66,9 @@ public:
 
 	void OnPickup(Item* item);
 
+
+	void SetAllowedEnemyTypes(const std::vector<Enemy::Types>& types);
+	bool CanCatchEnemy(Enemy::Types enemyType) const;
 	//void IncreaseSpeed(float amount);        // 이동 속도 증가
 	//void IncreaseMaxHealth(int amount);      // 최대 체력 증가
 

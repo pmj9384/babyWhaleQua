@@ -3,14 +3,17 @@
 #include "SpawnArea.hpp"  // spawndraw
 #include "Enemy.h"
 #include "Player.h"
+#include "Wave.h"
 
 class Player;
 class Enemy;
+class wave;
 
-class SceneGame : public Scene
-{
+class SceneGame : public Scene {
+	friend class Enemy;
 protected:
 	Player* player;
+	int playerLevel = 1;
 
 	std::list<Enemy*> enemys;
 	ObjectPool<Enemy> enemyPool;
@@ -18,10 +21,14 @@ protected:
 	std::list<Item*> items;
 	ObjectPool<Item> itemPool;
 
+	Wave* currentWave;
+
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
 	SpawnArea spawn3;
+
+
 	SceneGame();
 	virtual ~SceneGame() = default;
 
@@ -45,5 +52,19 @@ public:
 
 	void CheckWaveCompletion();
 	void ApplyUpgrade(int selectedUpgrade);
+
+	ObjectPool<Enemy>& GetEnemyPool() { return enemyPool; }
+
+
+	// 플레이어 레벨 
+	void SetPlayerLevel(int level);
+	void IncrementPlayerLevel();  // 플레이어 레벨 증가
+	int GetPlayerLevel() const;
+	void OnEnemyCatch(Enemy* enemy);
+	void CheckCollisions();
+
+	void OnEnemyDefeated(Enemy::Types enemyType);
+
+
 };
 

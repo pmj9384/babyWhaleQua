@@ -64,6 +64,7 @@ void Enemy::Init()
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
 
+
 	directionChangeInterval = 8.f; // 5초마다 방향 변경
 	directionChangeTimer = 0.f;
 	SetType(types);
@@ -103,27 +104,43 @@ void Enemy::Reset()
 
 	this->direction = direction; //방향 전환
 	directionChangeTimer = 0.f;
+
 }
 
 void Enemy::Update(float dt)
 {
-	if (active)
-	{
-		directionChangeTimer += dt;
-		if (directionChangeTimer >= directionChangeInterval)
-		{
-			directionChangeTimer = 0.f;
-			direction = Utils::RandomRange(0, 1) == 0 ? sf::Vector2f(1.f, 0.f) : sf::Vector2f(-1.f, 0.f);
-		}
-		if (direction.x != 0.f)
-		{
-			SetScale({ direction.x > 0.f ? 1.f : -1.f, 1.f }); // X축 반전
-		}
+	if (!active) 
+		return;
 
-		position += direction * speed * dt;
-		SetPosition(position);
+	if (!canAttack) // 비활성화된 적은 업데이트하지 않음
+	{
+		deactivateTimer += dt;
+		if (deactivateTimer >= deactivateTime)
+		{
+			canAttack = true; // 비활성화 시간이 지나면 다시 활성화
+		}
 	}
-	movementPattern->Update(dt, this, player);
+
+	directionChangeTimer += dt;
+	if (directionChangeTimer >= directionChangeInterval)
+	{
+		directionChangeTimer = 0.f;
+		direction = Utils::RandomRange(0, 1) == 0 ? sf::Vector2f(1.f, 0.f) : sf::Vector2f(-1.f, 0.f);
+	}
+
+	if (direction.x != 0.f)
+	{
+		SetScale({ direction.x > 0.f ? 1.f : -1.f, 1.f });
+		body.setOrigin(body.getLocalBounds().width / 2.f, body.getLocalBounds().height / 2.f);
+	}
+
+	position += direction * speed * dt;
+	SetPosition(position);
+
+	if (movementPattern)
+	{
+		movementPattern->Update(dt, this, player);
+	}
 	
 }
 
@@ -162,7 +179,9 @@ void Enemy::SetType(Types type)
 	speed = data.speed;
 	damage = data.damage;
 
-	body.setTexture(TEXTURE_MGR.Get(textureId));
+	const sf::Texture& tex = TEXTURE_MGR.Get(textureId);
+	body.setTexture(tex);
+	body.setTextureRect({ 0, 0, (int)tex.getSize().x, (int)tex.getSize().y });
 
 	if (movementPattern)
 	{
@@ -195,13 +214,55 @@ void Enemy::SetType(Types type)
 	}
 }
 
+void Enemy::SetSceneGame(SceneGame* game)
+{
+	scenegame = game;
+}
+
 void Enemy::OnDamage(int damage)
 {
+	if (!active) // 이미 비활성화된 경우 함수 종료
+		return;
+
+	hp -= damage;
+
+	if (hp <= 0)
+	{
+		SetActive(false); // 적 비활성화
+		if (scenegame)
+		{
+			scenegame->OnEnemyDefeated(types);
+		}
+		
+	}
+	
+}
+
+void Enemy::SetActive(bool isActive)
+{
+	if (isActive)
+	{
+		// 활성화 로직
+		active = true;
+		// 추가 로직...
+	}
+	else
+	{
+		// 비활성화 로직
+		active = false;
+		if (scenegame)
+		{
+			scenegame->OnEnemyDefeated(types);
+			scenegame->RemoveGo(this); // 적을 즉시 제거
+			scenegame->GetEnemyPool().Return(this); // enemyPool에 반환
+		}
+		// 추가 로직...
+	}
 }
 
 void Enemy::Deactivate(float duration)
 {
-	active = false;
+	canAttack = false;
 	deactivateTime = duration; // 비활성화 유지 시간 설정
 	deactivateTimer = 0.f;
 }
@@ -231,6 +292,11 @@ float Enemy::GetSpeed() const
 {
 	return speed;
 
+}
+
+int Enemy::GetHp() const
+{
+	return hp;
 }
 
 void Enemy::SetPlayer(Player* p)

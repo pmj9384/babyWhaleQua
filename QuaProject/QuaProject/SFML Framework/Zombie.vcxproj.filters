@@ -49,8 +49,8 @@
     <ClCompile Include="Framework\Variables.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="AniPlayer.cpp" />
-    <ClCompile Include="AniPlayer2.cpp" />
+    <ClCompile Include="Framework\AniPlayer.cpp" />
+    <ClCompile Include="Framework\AniPlayer2.cpp" />
     <ClCompile Include="Framework\UiHud.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -86,6 +86,7 @@
     <ClCompile Include="DashMovement.cpp" />
     <ClCompile Include="RandomMovement.cpp" />
     <ClCompile Include="SleepMovement.cpp" />
+    <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\SpawnArea.hpp">
@@ -148,8 +149,8 @@
     <ClInclude Include="Framework\Variables.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="AniPlayer.h" />
-    <ClInclude Include="AniPlayer2.h" />
+    <ClInclude Include="Framework\AniPlayer.h" />
+    <ClInclude Include="Framework\AniPlayer2.h" />
     <ClInclude Include="Framework\UiHud.h">
       <Filter>Framework</Filter>
     </ClInclude>
@@ -194,6 +195,7 @@
     <ClInclude Include="DashMovement.h" />
     <ClInclude Include="RandomMovement.h" />
     <ClInclude Include="SleepMovement.h" />
+    <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">

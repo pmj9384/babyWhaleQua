@@ -49,7 +49,7 @@ void Player::Init()
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
 	SetOrigin(Origins::MC);
-	SetPosition({1920.f * 0.5f, 1080.f * 0.5f});
+	SetPosition({ 1920.f * 0.5f, 1080.f * 0.5f });
 	int maxHp = 100;
 	int hp = maxHp;
 	/*healthBar.setFillColor(sf::Color::Red);
@@ -88,7 +88,7 @@ void Player::Update(float dt)
 	float mag = Utils::Magnitude(direction);
 	if (mag > 1.f)
 	{
-		 Utils::Normalize(direction);
+		Utils::Normalize(direction);
 	}
 	if (direction.x != 0.f)
 	{
@@ -100,7 +100,7 @@ void Player::Update(float dt)
 
 	debugBox.SetBounds(body.getGlobalBounds());
 	UpdateHealthBar();
-
+	speed = 500.f;
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -111,6 +111,14 @@ void Player::Draw(sf::RenderWindow& window)
 }
 
 
+
+void Player::AttackEnemy(Enemy* enemy)
+{
+	if (enemy != nullptr && enemy->IsActive())
+	{
+		enemy->OnDamage(attackDamage); // 적에게 데미지 전달
+	}
+}
 
 void Player::UpdateHealthBar()
 {
@@ -141,16 +149,24 @@ void Player::FixedUpdate(float dt)
 			continue;
 
 		auto playerPoints = Utils::GetShapePoints(body);
-		auto zombiePoints = Utils::GetShapePoints(enemy->GetBody());
+		auto enemyPoints = Utils::GetShapePoints(enemy->GetBody());
 
 		const sf::Transform& playerTransform = body.getTransform();
-		const sf::Transform& zombieTransform = enemy->GetBody().getTransform();
-		if (Utils::PolygonsIntersect(playerPoints, playerTransform, zombiePoints, zombieTransform))
+		const sf::Transform& enemyTransform = enemy->GetBody().getTransform();
+
+		if (Utils::PolygonsIntersect(playerPoints, playerTransform, enemyPoints, enemyTransform))
 		{
-			OnDamage(enemy->GetDamage());  // 좀비의 데미지를 받아 체력 감소
-			enemy->Deactivate(0.2f); // 0.2동안 공격 비활성화
-			enemy->SetActive(false);
-			break;
+			if (CanCatchEnemy(enemy->GetType()))
+			{
+				AttackEnemy(enemy); // Enemy에게 데미지 주기
+				break; // 한 번의 충돌만 처리
+			}
+			else
+			{
+				OnDamage(enemy->GetDamage()); // 플레이어가 적에게 데미지를 받음
+				enemy->Deactivate(0.2f);
+			}
+			break; // 한 번의 충돌만 처리
 		}
 	}
 
@@ -206,6 +222,23 @@ void Player::IncreaseHealth(int amount)
 void Player::OnPickup(Item* item)
 {
 	item->OnPickup(this);
+}
+
+void Player::SetAllowedEnemyTypes(const std::vector<Enemy::Types>& types)
+{
+	allowedEnemyTypes = types;
+}
+
+bool Player::CanCatchEnemy(Enemy::Types enemyType) const
+{
+	for (const auto& allowedType : allowedEnemyTypes)
+	{
+		if (allowedType == enemyType)
+		{
+			return true; // 플레이어가 잡을 수 있는 적의 타입이면 true
+		}
+	}
+	return false;
 }
 
 

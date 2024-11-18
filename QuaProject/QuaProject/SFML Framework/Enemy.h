@@ -15,8 +15,9 @@ class Enemy :  public GameObject
 			redFish,
 			buleFish,
 			purpleFish,
+			none,
 		};
-		static const int TotalTypes = 5;
+		static const int TotalTypes = 6;
 		bool dead = false;
 
 protected:
@@ -28,14 +29,14 @@ protected:
 	Player* player = nullptr;
 	SceneGame* scenegame = nullptr;
 
-	int maxHp = 0;
+	int maxHp = 100;
 	float speed = 0.f;
 	int damage = 0;
 	float attackInterval = 0.f;
-	int hp = 0;
+	int hp = 100;
 
 
-
+	bool canAttack = true;
 	float attackTimer = 0.f;
 	bool active = true; // 공격활성화
 	float deactivateTime; // 비활성화 유지 시간
@@ -72,10 +73,10 @@ public:
 	bool IsWithinBounds() const;
 
 	void SetType(Types type);
+	Types GetType() const { return types; }
 
-	void OnDamage(int damage);
 	int GetDamage() const { return damage; }
-	bool IsActive() const { return active; }
+	void SetActive(bool isActive);
 	void Deactivate(float duration);
 
 	void SetDirection(const sf::Vector2f& dir);
@@ -83,10 +84,11 @@ public:
 	void AddMovementPattern(MovementPattern* pattern);
 	sf::Vector2f GetDirection() const;
 	float GetSpeed() const;
-
+	int GetHp() const;
 	void SetPlayer(Player* p);
 
-
+	void SetSceneGame(SceneGame* game);
+	void OnDamage(int damage);
 	/*SaveEnemy GetSaveData()const;
 	void LoadSaveData(const SaveEnemy& data);*/
 };

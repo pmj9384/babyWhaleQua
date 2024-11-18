@@ -148,8 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AniPlayer.cpp" />
-    <ClCompile Include="AniPlayer2.cpp" />
+    <ClCompile Include="Framework\AniPlayer.cpp" />
+    <ClCompile Include="Framework\AniPlayer2.cpp" />
     <ClCompile Include="ChaseMovement.cpp" />
     <ClCompile Include="DashMovement.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -187,10 +187,11 @@
     <ClCompile Include="Framework\UiHud.cpp" />
     <ClCompile Include="SleepMovement.cpp" />
     <ClCompile Include="StraightMovement.cpp" />
+    <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AniPlayer.h" />
-    <ClInclude Include="AniPlayer2.h" />
+    <ClInclude Include="Framework\AniPlayer.h" />
+    <ClInclude Include="Framework\AniPlayer2.h" />
     <ClInclude Include="ChaseMovement.h" />
     <ClInclude Include="DashMovement.h" />
     <ClInclude Include="Enemy.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Framework\UiHud.h" />
     <ClInclude Include="SleepMovement.h" />
     <ClInclude Include="StraightMovement.h" />
+    <ClInclude Include="Wave.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
