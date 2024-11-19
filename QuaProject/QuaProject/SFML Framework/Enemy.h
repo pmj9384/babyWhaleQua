@@ -34,14 +34,14 @@ protected:
 	int damage = 0;
 	float attackInterval = 0.f;
 	int hp = 100;
-
+	float healthRestore;
 
 	bool canAttack = true;
 	float attackTimer = 0.f;
 	bool active = true; // 공격활성화
 	float deactivateTime; // 비활성화 유지 시간
 	float deactivateTimer;
-
+	bool isPendingRemoval = false;
 
 	float directionChangeInterval;
 	float directionChangeTimer;
@@ -85,10 +85,12 @@ public:
 	sf::Vector2f GetDirection() const;
 	float GetSpeed() const;
 	int GetHp() const;
+	int GetHealthRestore() const;
 	void SetPlayer(Player* p);
 
 	void SetSceneGame(SceneGame* game);
 	void OnDamage(int damage);
+	bool IsPendingRemoval() const { return isPendingRemoval; }
 	/*SaveEnemy GetSaveData()const;
 	void LoadSaveData(const SaveEnemy& data);*/
 };

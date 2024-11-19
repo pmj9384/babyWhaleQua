@@ -4,15 +4,19 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "Wave.h"
+#include "UiHealthBar.h"
 
 class Player;
 class Enemy;
 class wave;
+class UiHealthBar;
 
 class SceneGame : public Scene {
 	friend class Enemy;
 protected:
 	Player* player;
+	UiHealthBar* uiHealthbar;
+
 	int playerLevel = 1;
 
 	std::list<Enemy*> enemys;

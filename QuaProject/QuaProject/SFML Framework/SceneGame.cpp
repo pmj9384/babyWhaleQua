@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "wave.h"
+#include "UiHealthBar.h"
 
 SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
@@ -45,6 +46,9 @@ void SceneGame::Init()
 	currentWave->StartWave();
 	SetPlayerLevel(1);
 
+	uiHealthbar = AddGo(new UiHealthBar("UiHealthBar"));
+	uiHealthbar->SetPlayer(player);
+
 	Scene::Init();
 }
 
@@ -83,7 +87,11 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-
+	player->Update(dt);
+	if (uiHealthbar)
+	{
+		uiHealthbar->SetCurrentHealth(player->GetHealth());
+	}
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신

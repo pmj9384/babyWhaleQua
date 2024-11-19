@@ -87,6 +87,7 @@
     <ClCompile Include="RandomMovement.cpp" />
     <ClCompile Include="SleepMovement.cpp" />
     <ClCompile Include="Wave.cpp" />
+    <ClCompile Include="UiHealthBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\SpawnArea.hpp">
@@ -196,6 +197,7 @@
     <ClInclude Include="RandomMovement.h" />
     <ClInclude Include="SleepMovement.h" />
     <ClInclude Include="Wave.h" />
+    <ClInclude Include="UiHealthBar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">

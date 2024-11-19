@@ -23,8 +23,7 @@ bool EnemyTable::Load()
 		table[id].textureId = row[1];
 		table[id].speed = std::stof(row[2]);
 		table[id].damage = std::stof(row[3]);
-
-
+		table[id].healthRestore = std::stof(row[4]);
 	}
 
 	return true;

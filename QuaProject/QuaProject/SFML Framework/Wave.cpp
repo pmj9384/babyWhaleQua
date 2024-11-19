@@ -16,71 +16,71 @@ void Wave::SetType(Types wavetype)
     switch (wavetype)
     {
     case Types::Wave1:
-        EnemysToSpawn = 30;
-        spawnInterval = 2.f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
         AddTargetToKill(Enemy::Types::smallFish, 2);
         break;
     case Types::Wave2:
-        EnemysToSpawn = 30;
-        spawnInterval = 1.8f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
         AddTargetToKill(Enemy::Types::smallFish, 3);
         break;
     case Types::Wave3:
-        EnemysToSpawn = 15;
-        spawnInterval = 1.6f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
 
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
         AddTargetToKill(Enemy::Types::smallFish, 3);
         AddTargetToKill(Enemy::Types::redFish, 3);
         break;
     case Types::Wave4:
-        EnemysToSpawn = 20;
-        spawnInterval = 1.4f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
        spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
         AddTargetToKill(Enemy::Types::smallFish, 3);
         AddTargetToKill(Enemy::Types::redFish, 4); // SmallFish 3마리
         break;
     case Types::Wave5:
-        EnemysToSpawn = 20;
-        spawnInterval = 1.2f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
         AddTargetToKill(Enemy::Types::redFish, 4);
         AddTargetToKill(Enemy::Types::buleFish, 4);
         break;
 
     case Types::Wave6:
-        EnemysToSpawn = 20;
-        spawnInterval = 2.f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
         AddTargetToKill(Enemy::Types::redFish, 4);
         AddTargetToKill(Enemy::Types::buleFish, 5);
         break;
     case Types::Wave7:
-        EnemysToSpawn = 25;
-        spawnInterval = 1.8f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
         AddTargetToKill(Enemy::Types::redFish, 5);
         AddTargetToKill(Enemy::Types::buleFish, 5);
         break;
     case Types::Wave8:
-        EnemysToSpawn = 25;
-        spawnInterval = 1.6f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = {Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish,Enemy::Types::Shark};
         AddTargetToKill(Enemy::Types::buleFish, 5);
         AddTargetToKill(Enemy::Types::purpleFish, 6);
         break;
     case Types::Wave9:
-        EnemysToSpawn = 25;
-        spawnInterval = 1.4f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = {Enemy::Types::buleFish,Enemy::Types::purpleFish,Enemy::Types::Shark };
         AddTargetToKill(Enemy::Types::buleFish, 6);
         AddTargetToKill(Enemy::Types::purpleFish, 7);
         break;
     case Types::Wave10:
-        EnemysToSpawn = 30;
-        spawnInterval = 1.2f;
+        EnemysToSpawn = 50;
+        spawnInterval = 0.8f;
         spawnableTypes = { Enemy::Types::buleFish,Enemy::Types::purpleFish,Enemy::Types::Shark };
         AddTargetToKill(Enemy::Types::buleFish, 7);
         AddTargetToKill(Enemy::Types::purpleFish, 8);
@@ -111,6 +111,7 @@ void Wave::Update(float dt)
     if (allTargetsCompleted)
     {
         waveActive = false; // 웨이브 종료
+        Reset();
     }
 }
 void Wave::StartWave()

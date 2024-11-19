@@ -109,10 +109,11 @@ void Enemy::Reset()
 
 void Enemy::Update(float dt)
 {
-	if (!active) 
+	if (!active)
 		return;
 
-	if (!canAttack) // 비활성화된 적은 업데이트하지 않음
+	// 비활성화된 적은 업데이트하지 않음
+	if (!canAttack)
 	{
 		deactivateTimer += dt;
 		if (deactivateTimer >= deactivateTime)
@@ -120,14 +121,39 @@ void Enemy::Update(float dt)
 			canAttack = true; // 비활성화 시간이 지나면 다시 활성화
 		}
 	}
+	static bool hasReachedCenter = false;
 
-	directionChangeTimer += dt;
-	if (directionChangeTimer >= directionChangeInterval)
+	// 중심에 가까운지 판단 (100.f은 중심 근처라고 판단하는 거리)
+	if (!hasReachedCenter)
 	{
-		directionChangeTimer = 0.f;
-		direction = Utils::RandomRange(0, 1) == 0 ? sf::Vector2f(1.f, 0.f) : sf::Vector2f(-1.f, 0.f);
-	}
+		sf::Vector2f screenCenter = { player->GetPosition().x, player->GetPosition().y }; // 화면 중심 (플레이어 기준)
+		float distanceToCenter = std::abs(position.x - screenCenter.x);
 
+		// 중심에 가까운지 판단 (100.f은 중심 근처라고 판단하는 거리)
+		if (distanceToCenter < 100.f)
+		{
+			hasReachedCenter = true; // 중앙 도달 플래그 설정
+		}
+		else
+		{
+			// 화면 중심으로 향하도록 방향 설정
+			direction = position.x < screenCenter.x ? sf::Vector2f(1.f, 0.f) : sf::Vector2f(-1.f, 0.f);
+		}
+	}
+	else
+	{
+		// 중심에 도달한 이후에는 자유롭게 움직임
+		directionChangeTimer += dt;
+		if (directionChangeTimer >= directionChangeInterval)
+		{
+			directionChangeTimer = 0.f;
+			bool shouldChangeDirection = Utils::RandomRange(0, 1) == 0;
+			if (shouldChangeDirection)
+			{
+				direction = sf::Vector2f(-direction.x, 0.f); // 방향 반전
+			}
+		}
+	}
 	if (direction.x != 0.f)
 	{
 		SetScale({ direction.x > 0.f ? 1.f : -1.f, 1.f });
@@ -178,6 +204,7 @@ void Enemy::SetType(Types type)
 	textureId = data.textureId;
 	speed = data.speed;
 	damage = data.damage;
+	healthRestore = data.healthRestore;
 
 	const sf::Texture& tex = TEXTURE_MGR.Get(textureId);
 	body.setTexture(tex);
@@ -223,19 +250,17 @@ void Enemy::OnDamage(int damage)
 {
 	if (!active) // 이미 비활성화된 경우 함수 종료
 		return;
-
 	hp -= damage;
 
 	if (hp <= 0)
 	{
+		hp = 0;
 		SetActive(false); // 적 비활성화
 		if (scenegame)
 		{
 			scenegame->OnEnemyDefeated(types);
-		}
-		
+		}	
 	}
-	
 }
 
 void Enemy::SetActive(bool isActive)
@@ -252,7 +277,7 @@ void Enemy::SetActive(bool isActive)
 		active = false;
 		if (scenegame)
 		{
-			scenegame->OnEnemyDefeated(types);
+			//scenegame->OnEnemyDefeated(types);
 			scenegame->RemoveGo(this); // 적을 즉시 제거
 			scenegame->GetEnemyPool().Return(this); // enemyPool에 반환
 		}
@@ -297,6 +322,11 @@ float Enemy::GetSpeed() const
 int Enemy::GetHp() const
 {
 	return hp;
+}
+
+int Enemy::GetHealthRestore() const
+{
+	return healthRestore;
 }
 
 void Enemy::SetPlayer(Player* p)

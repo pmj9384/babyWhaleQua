@@ -5,6 +5,7 @@ class SceneGame;
 class DebugBox;
 class Item;
 class HitBox;
+class Enemy;
 
 class Player : public GameObject
 {
@@ -30,10 +31,14 @@ protected:
 
 	int maxHealth;           // 최대 체력
 	float runSpeed;          // 이동 속도
-	//int healthPickupBonus;   // 체력 아이템 효과
 
+	bool isInvincible = false;           // 무적 상태 여부
+	float invincibleDuration = 1.0f;     // 무적 상태 지속 시간 (초)
+	float invincibleTimer = 0.0f;
 
-
+	float healthDecreaseTimer = 0.f; // 체력 감소를 위한 타이머
+	const float decreaseInterval = 1.f;
+	Enemy* lastCollidedEnemy = nullptr;
 	HitBox* hitBox;
 public:
 
@@ -63,12 +68,15 @@ public:
 
 	void IncreaseHealth(int amount); // 체력증가
 	int GetHealth()const { return hp; }
-
+	float GetMaxHealth() const { return maxHp; }
 	void OnPickup(Item* item);
 
 
 	void SetAllowedEnemyTypes(const std::vector<Enemy::Types>& types);
+
 	bool CanCatchEnemy(Enemy::Types enemyType) const;
+	void ConsumeEnemy(Enemy* enemy);
+	void OnCollisionWithEnemy(Enemy* enemy);
 	//void IncreaseSpeed(float amount);        // 이동 속도 증가
 	//void IncreaseMaxHealth(int amount);      // 최대 체력 증가
 

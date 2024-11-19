@@ -43,3 +43,4 @@
 #include "AniPlayer.h"
 #include "ItemTable.h"
 #include "EnemyTable.h"
+#include "UiHealthBar.h"

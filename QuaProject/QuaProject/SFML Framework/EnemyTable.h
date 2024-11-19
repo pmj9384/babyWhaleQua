@@ -11,6 +11,7 @@ struct DataEnemy
 	std::string textureId;
 	int speed = 0;
 	int damage = 0;
+	int healthRestore = 0;
 };
 
 class EnemyTable : public DataTable
