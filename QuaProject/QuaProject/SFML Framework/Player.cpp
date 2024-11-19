@@ -101,6 +101,7 @@ void Player::Update(float dt)
 		if (invincibleTimer <= 0.0f) {
 			isInvincible = false;
 			invincibleTimer = 0.0f;
+			body.setColor(sf::Color(255, 255, 255, 255));
 			std::cout << "Player is no longer invincible." << std::endl;
 		}
 	}
@@ -289,6 +290,8 @@ void Player::OnPickup(Item* item)
 	item->OnPickup(this);
 	isInvincible = true;
 	invincibleTimer = invincibleDuration;
+
+	body.setColor(sf::Color(255, 255, 255, 128));
 	std::cout << "Player is now invincible for " << invincibleDuration << " seconds." << std::endl;
 }
 

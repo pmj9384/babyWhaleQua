@@ -50,6 +50,8 @@ void SceneGame::Init()
 	uiHealthbar = AddGo(new UiHealthBar("UiHealthBar"));
 	uiHealthbar->SetPlayer(player);
 
+	isPaused = true;
+
 	Scene::Init();
 }
 
@@ -87,18 +89,42 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-	Scene::Update(dt);
+
+	//player->Update(dt);
+	if (isPaused)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+		{
+			isPaused = false;
+
+			// uiStart->SetActive(false);
+		}
+		return;
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+	{
+		isPaused = true;
+		// uiStart->SetActive(true);
+		return;
+	}
 	player->Update(dt);
+
+	for (auto& enemy : enemys)
+	{
+		enemy->Update(dt);
+	}
 	if (uiHealthbar)
 	{
 		uiHealthbar->SetCurrentHealth(player->GetHealth());
 	}
+	 
 	itemSpawnTimer += dt;
 	if (itemSpawnTimer >= itemSpawnInterval)
 	{
 		itemSpawnTimer -= itemSpawnInterval; // 타이머 초기화
 		SpawnItem(1); // 아이템 스폰
 	}
+
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신
@@ -110,7 +136,7 @@ void SceneGame::Update(float dt)
 			currentWave->IncrementSpawnedEnemies();
 		}
 
-		if ( currentWave->IsWaveComplete())
+		if (currentWave->IsWaveComplete())
 		{
 			// 기존 웨이브 삭제
 			delete currentWave;
@@ -153,11 +179,12 @@ void SceneGame::Update(float dt)
 		{
 			playerPos.y = bounds.top;
 		}
-		else if (playerPos.y > bounds.top + bounds.height-250 )
+		else if (playerPos.y > bounds.top + bounds.height - 250)
 		{
-			playerPos.y = bounds.top + bounds.height-250;
+			playerPos.y = bounds.top + bounds.height - 250;
 		}
 		player->SetPosition(playerPos);
+		Scene::Update(dt);
 	}
 }
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -246,6 +273,7 @@ void SceneGame::PauseGame()
 
 void SceneGame::ResumeGame()
 {
+	isPaused = false;
 }
 
 void SceneGame::CheckWaveCompletion()
