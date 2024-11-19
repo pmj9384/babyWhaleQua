@@ -28,12 +28,12 @@ void SceneGame::Init()
 	player = AddGo(new Player("Player"));
 
 	spawn1.SetPosition( -100.0f, 0.0f);
-	spawn1.SetSize(100.f, backgroundSize.y-610);
+	spawn1.SetSize(100.f, backgroundSize.y-500);
 	spawn1.SetOrigin(Origins::MC);
 	spawn1.SetDrawable(false); // 테두리 표시
 
 	spawn2.SetPosition(1920.0f, 0.0f); 
-	spawn2.SetSize(100.f, backgroundSize.y-610);
+	spawn2.SetSize(100.f, backgroundSize.y- 500);
 	spawn2.SetOrigin(Origins::MC);
 	spawn2.SetDrawable(false); 
 
@@ -153,9 +153,9 @@ void SceneGame::Update(float dt)
 		{
 			playerPos.y = bounds.top;
 		}
-		else if (playerPos.y > bounds.top + bounds.height)
+		else if (playerPos.y > bounds.top + bounds.height-250 )
 		{
-			playerPos.y = bounds.top + bounds.height;
+			playerPos.y = bounds.top + bounds.height-250;
 		}
 		player->SetPosition(playerPos);
 	}

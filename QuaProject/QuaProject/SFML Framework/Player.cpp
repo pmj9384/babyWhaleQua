@@ -146,14 +146,15 @@ void Player::AttackEnemy(Enemy* enemy)
 			int restoreAmount = enemy->GetHealthRestore();
 			IncreaseHealth(restoreAmount); // 체력 회복
 			std::cout << "AttackEnemy: Restored health: " << restoreAmount << std::endl;
+			if (sceneGame)
+			{
+				sceneGame->OnEnemyDefeated(enemy->GetType());
+			}
 		}
 
 		// 적을 비활성화
 		enemy->SetActive(false);
-		if (sceneGame)
-		{
-			sceneGame->OnEnemyDefeated(enemy->GetType());
-		}
+
 		// 마지막으로 처리한 적 갱신
 		lastCollidedEnemy = enemy;
 	}
