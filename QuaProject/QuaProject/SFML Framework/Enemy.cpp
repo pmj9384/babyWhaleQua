@@ -255,11 +255,11 @@ void Enemy::OnDamage(int damage)
 	if (hp <= 0)
 	{
 		hp = 0;
-		SetActive(false); // 적 비활성화
-		if (scenegame)
+		//SetActive(false); // 적 비활성화
+	/*	if (scenegame)
 		{
 			scenegame->OnEnemyDefeated(types);
-		}	
+		}	*/
 	}
 }
 

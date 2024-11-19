@@ -27,6 +27,7 @@ protected:
 	Wave* currentWave;
 	float itemSpawnTimer = 0.0f;
 	float itemSpawnInterval = 20.0f;
+	bool isPaused = false;
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
@@ -68,7 +69,6 @@ public:
 	void CheckCollisions();
 
 	void OnEnemyDefeated(Enemy::Types enemyType);
-
 
 };
 

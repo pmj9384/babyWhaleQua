@@ -150,7 +150,10 @@ void Player::AttackEnemy(Enemy* enemy)
 
 		// 적을 비활성화
 		enemy->SetActive(false);
-
+		if (sceneGame)
+		{
+			sceneGame->OnEnemyDefeated(enemy->GetType());
+		}
 		// 마지막으로 처리한 적 갱신
 		lastCollidedEnemy = enemy;
 	}

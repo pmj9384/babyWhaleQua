@@ -17,12 +17,13 @@ void SceneGame::Init()
 	worldView.setSize(1920.f, 1080.f);
 
 	auto size = FRAMEWORK.GetWindowSize();
-	GameObject* obj = AddGo(new SpriteGo("graphics/images/Background.png"));
+	GameObject* obj = AddGo(new SpriteGo("graphics/images/Background.png", "graphics/images/Background.png"));
 	const auto& backgroundSize = TEXTURE_MGR.Get("graphics/images/Background.png").getSize();
 	obj->sortingLayer = SortingLayers::Background;
 	obj->sortingOrder = -1;
 	obj->SetPosition({ 0.0f, 0.0f });
 	obj->SetScale({ 1.0f * (1920.f / backgroundSize.x), 1.0f * (1080.f / backgroundSize.y)});
+
 
 	player = AddGo(new Player("Player"));
 
@@ -135,6 +136,28 @@ void SceneGame::Update(float dt)
 				currentWave = nullptr; // 게임 종료 상태로 전환
 			}
 		}
+		GameObject* obj = static_cast<GameObject*>(FindGo("graphics/images/Background.png"));
+		sf::FloatRect bounds = obj->GetGlobalBounds();
+		sf::Vector2f playerPos = player->GetPosition();
+
+		if (playerPos.x < bounds.left)
+		{
+			playerPos.x = bounds.left;
+		}
+		else if (playerPos.x > bounds.left + bounds.width)
+		{
+			playerPos.x = bounds.left + bounds.width;
+		}
+
+		if (playerPos.y < bounds.top)
+		{
+			playerPos.y = bounds.top;
+		}
+		else if (playerPos.y > bounds.top + bounds.height)
+		{
+			playerPos.y = bounds.top + bounds.height;
+		}
+		player->SetPosition(playerPos);
 	}
 }
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -212,10 +235,13 @@ void SceneGame::SpawnEnemy(int count)
 
 void SceneGame::OnPlayerDie(Player* player)
 {
+	player->SetActive(false);
+	isPaused = true;
 }
 
 void SceneGame::PauseGame()
 {
+	isPaused = true;
 }
 
 void SceneGame::ResumeGame()
@@ -330,5 +356,6 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 
 
 }
+
 
 
