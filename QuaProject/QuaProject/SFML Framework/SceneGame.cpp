@@ -92,6 +92,12 @@ void SceneGame::Update(float dt)
 	{
 		uiHealthbar->SetCurrentHealth(player->GetHealth());
 	}
+	itemSpawnTimer += dt;
+	if (itemSpawnTimer >= itemSpawnInterval)
+	{
+		itemSpawnTimer -= itemSpawnInterval; // 타이머 초기화
+		SpawnItem(1); // 아이템 스폰
+	}
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신

@@ -17,8 +17,8 @@ void UiHealthBar::Init()
     }
     barSprite.setTexture(barTexture);
     barSprite.setOrigin(0.f, 0.f);
-    barSprite.setPosition(160.f, 15.f);
-    barSprite.setScale(3.6f, 2.3f);
+    barSprite.setPosition(175.f, 15.f);
+    barSprite.setScale(3.5f, 2.3f);
     barSprite.setTextureRect(sf::IntRect(0, 0, barTexture.getSize().x, barTexture.getSize().y));
     
 }

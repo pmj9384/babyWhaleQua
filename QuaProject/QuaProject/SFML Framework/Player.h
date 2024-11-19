@@ -33,7 +33,7 @@ protected:
 	float runSpeed;          // 이동 속도
 
 	bool isInvincible = false;           // 무적 상태 여부
-	float invincibleDuration = 1.0f;     // 무적 상태 지속 시간 (초)
+	float invincibleDuration = 5.f;     // 무적 상태 지속 시간 (초)
 	float invincibleTimer = 0.0f;
 
 	float healthDecreaseTimer = 0.f; // 체력 감소를 위한 타이머
