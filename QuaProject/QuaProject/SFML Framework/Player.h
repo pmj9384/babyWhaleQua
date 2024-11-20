@@ -20,7 +20,6 @@ protected:
 
 	SceneGame* sceneGame;
 
-
 	DebugBox debugBox;
 
 	sf::RectangleShape healthBar;
@@ -40,6 +39,8 @@ protected:
 	const float decreaseInterval = 1.f;
 	Enemy* lastCollidedEnemy = nullptr;
 	HitBox* hitBox;
+
+	//sf::Sprite body;
 public:
 
 	Player(const std::string& name = "");
@@ -77,6 +78,8 @@ public:
 	bool CanCatchEnemy(Enemy::Types enemyType) const;
 	void ConsumeEnemy(Enemy* enemy);
 	void OnCollisionWithEnemy(Enemy* enemy);
+
+	void ChangeTexture(const std::string& textureId);
 	//void IncreaseSpeed(float amount);        // 이동 속도 증가
 	//void IncreaseMaxHealth(int amount);      // 최대 체력 증가
 

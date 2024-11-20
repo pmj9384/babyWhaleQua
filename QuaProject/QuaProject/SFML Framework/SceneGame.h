@@ -14,6 +14,7 @@ class UiHealthBar;
 class SceneGame : public Scene {
 	friend class Enemy;
 protected:
+	sf::Sprite levelNumber;
 	Player* player;
 	UiHealthBar* uiHealthbar;
 
@@ -28,6 +29,7 @@ protected:
 	float itemSpawnTimer = 0.0f;
 	float itemSpawnInterval = 20.0f;
 	bool isPaused = false;
+
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;

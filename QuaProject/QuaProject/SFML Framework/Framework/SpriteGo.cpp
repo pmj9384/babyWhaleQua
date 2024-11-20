@@ -51,6 +51,12 @@ void SpriteGo::Draw(sf::RenderWindow& window)
 	window.draw(sprite);
 }
 
+void SpriteGo::SetTexture(const sf::Texture& texture)
+{
+	sprite.setTexture(texture);
+	sprite.setTextureRect({ 0, 0, (int)texture.getSize().x, (int)texture.getSize().y });
+}
+
 void SpriteGo::Init()
 {
 }

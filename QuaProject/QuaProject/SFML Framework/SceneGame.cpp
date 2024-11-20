@@ -25,8 +25,20 @@ void SceneGame::Init()
 	obj->SetScale({ 1.0f * (1920.f / backgroundSize.x), 1.0f * (1080.f / backgroundSize.y)});
 
 
-	player = AddGo(new Player("Player"));
+	auto* player = new Player();
+	AddGo(player);
+	this->player = player;
+	SetPlayerLevel(1);
 
+	GameObject* levelNum = AddGo( new SpriteGo("graphics/images/36.png", "LevelNumber"));
+	levelNum->sortingLayer = SortingLayers::UI;
+	levelNum->sortingOrder = 1;
+	levelNum->SetPosition({ 105.0f, windowSize.y-215.f });
+	levelNum->SetScale({ 2.5f,3.f });
+	if (TEXTURE_MGR.Load("graphics/images/36.png"))
+	{
+		levelNum->SetTexture(TEXTURE_MGR.Get("graphics/images/36.png"));
+	}
 	spawn1.SetPosition( -100.0f, 0.0f);
 	spawn1.SetSize(100.f, backgroundSize.y-500);
 	spawn1.SetOrigin(Origins::MC);
@@ -287,40 +299,59 @@ void SceneGame::ApplyUpgrade(int selectedUpgrade)
 void SceneGame::SetPlayerLevel(int level)
 {
 	std::vector<Enemy::Types> allowedTypes;
-
+	std::string textureId;
+	std::string levelImageId;
 	switch (level)
 	{
 	case 1:
 		allowedTypes = { Enemy::Types::smallFish }; // 레벨 1에서는 smallFish만 잡을 수 있음
+		textureId = "graphics/images/91.png";
+		levelImageId = "graphics/images/36.png";
 		break;
 	case 2:
 		allowedTypes = { Enemy::Types::smallFish };
+		textureId = "graphics/images/105.png";
+		levelImageId = "graphics/images/38.png";
 		break;
 	case 3:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		textureId = "graphics/images/116.png";
+		levelImageId = "graphics/images/40.png";
 		break;
 	case 4:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		textureId = "graphics/images/127.png";
+		levelImageId = "graphics/images/42.png";
 		break;
 	case 5:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/138.png";
+		levelImageId = "graphics/images/44.png";
 		break;
 	case 6:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/149.png";
+		levelImageId = "graphics/images/46.png";
 		break;
 	case 7:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/160.png";
+		levelImageId = "graphics/images/48.png";
 		break;
 	case 8:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+		textureId = "graphics/images/171.png";
+		levelImageId = "graphics/images/50.png";
 		break;
 	case 9:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-
+		textureId = "graphics/images/182.png";
+		levelImageId = "graphics/images/52.png";
 		break;
 	case 10:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-
+		textureId = "graphics/images/193.png";
+		levelImageId = "graphics/images/54.png";
 		break;
 	default:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
@@ -328,6 +359,12 @@ void SceneGame::SetPlayerLevel(int level)
 	}
 
 	player->SetAllowedEnemyTypes(allowedTypes);
+	player->ChangeTexture(textureId);
+	GameObject* levelNum = FindGo("LevelNumber");
+	if (levelNum)
+	{
+		levelNum->SetTexture(TEXTURE_MGR.Get(levelImageId));
+	}
 }
 
 void SceneGame::IncrementPlayerLevel()
