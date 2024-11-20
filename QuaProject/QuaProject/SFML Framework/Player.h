@@ -39,7 +39,7 @@ protected:
 	const float decreaseInterval = 1.f;
 	Enemy* lastCollidedEnemy = nullptr;
 	HitBox* hitBox;
-
+	std::unordered_set<Enemy*> processedEnemies;  // 이미 처리된 적을 저장할 집합
 	//sf::Sprite body;
 public:
 

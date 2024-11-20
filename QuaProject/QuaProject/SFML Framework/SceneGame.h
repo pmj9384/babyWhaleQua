@@ -20,7 +20,7 @@ protected:
 	sf::Sprite missionUi;
 	Player* player;
 	UiHealthBar* uiHealthbar;
-
+	Enemy* enemy;
 	int playerLevel = 1;
 
 	UiHud* uiHud;

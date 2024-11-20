@@ -8,7 +8,7 @@ private:
     float dashTimer = 0.f;
     float dashInterval = 5.f; // 5초마다 돌진
     bool isDashing = false;
-
+    float dashSpeedMultiplier = 2.f;
 public:
     DashMovement(const std::string& name = "");
     ~DashMovement() = default;

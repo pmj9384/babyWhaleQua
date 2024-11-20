@@ -138,19 +138,20 @@ void Player::AttackEnemy(Enemy* enemy)
 	if (enemy != nullptr && enemy->IsActive())
 	{
 		// 이미 처리한 적이라면 무시
-		if (enemy == lastCollidedEnemy)
+		if (processedEnemies.find(enemy) != processedEnemies.end())
 		{
 			std::cout << "AttackEnemy: Already processed this enemy. Ignoring." << std::endl;
 			return;
 		}
 
-		enemy->OnDamage(attackDamage); // 적에게 데미지 전달
+		enemy->OnDamage(attackDamage);  // 적에게 데미지 전달
 
 		if (CanCatchEnemy(enemy->GetType()))
 		{
 			int restoreAmount = enemy->GetHealthRestore();
-			IncreaseHealth(restoreAmount); // 체력 회복
+			IncreaseHealth(restoreAmount);  // 체력 회복
 			std::cout << "AttackEnemy: Restored health: " << restoreAmount << std::endl;
+
 			if (sceneGame)
 			{
 				sceneGame->OnEnemyDefeated(enemy->GetType());
@@ -159,6 +160,9 @@ void Player::AttackEnemy(Enemy* enemy)
 
 		// 적을 비활성화
 		enemy->SetActive(false);
+
+		// 처리된 적을 집합에 추가
+		processedEnemies.insert(enemy);
 
 		// 마지막으로 처리한 적 갱신
 		lastCollidedEnemy = enemy;

@@ -15,7 +15,7 @@ void SleepMovement::Update(float dt, Enemy* enemy, Player* player)
     if (isSleeping)
     {
         // 적의 속도를 느리게 설정
-        float slowSpeed = enemy->GetSpeed() * 0.25f;
+        float slowSpeed = enemy->GetSpeed() * 0.05f;
         sf::Vector2f newPosition = enemy->GetPosition() + enemy->GetDirection() * slowSpeed * dt;
         enemy->SetPosition(newPosition);
 

@@ -51,21 +51,21 @@ void SceneGame::Init()
 	GameObject* missionUi = AddGo(new SpriteGo("graphics/sprites/UiEnermybar_89/mission1.png","MissionUi"));
 	missionUi->sortingLayer = SortingLayers::UI;
 	missionUi->sortingOrder = 1;
-	missionUi->SetPosition({ 275.0f, windowSize.y - 260.f });
-	missionUi->SetScale({ 1.f,1.0f });
+	missionUi->SetPosition({ 270.0f, windowSize.y - 250.f });
+	missionUi->SetScale({ 0.8f,1.0f });
 	if (TEXTURE_MGR.Load("graphics/sprites/UiEnergybar_89/mission1.png"))
 	{
 		missionUi->SetTexture(TEXTURE_MGR.Get("graphics/sprites/UiEnermybar_89/mission1.png"));
 	}
 
 
-	spawn1.SetPosition( -100.0f, 0.0f);
-	spawn1.SetSize(100.f, backgroundSize.y-500);
+	spawn1.SetPosition( -100.0f, 400.0f);
+	spawn1.SetSize(100.f, backgroundSize.y-700);
 	spawn1.SetOrigin(Origins::MC);
 	spawn1.SetDrawable(false); // 테두리 표시
 
-	spawn2.SetPosition(1920.0f, 0.0f); 
-	spawn2.SetSize(100.f, backgroundSize.y- 500);
+	spawn2.SetPosition(1920.0f, 400.0f);
+	spawn2.SetSize(100.f, backgroundSize.y- 700);
 	spawn2.SetOrigin(Origins::MC);
 	spawn2.SetDrawable(false); 
 

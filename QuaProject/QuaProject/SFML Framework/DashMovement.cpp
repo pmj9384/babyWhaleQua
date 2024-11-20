@@ -4,6 +4,7 @@
 #include "Player.h"
 
 DashMovement::DashMovement(const std::string& name)
+    : dashTimer(0.f), dashInterval(2.f), isDashing(false), dashSpeedMultiplier(2.f)
 {
 }
 
@@ -11,29 +12,28 @@ void DashMovement::Update(float dt, Enemy* enemy, Player* player)
 {
     dashTimer += dt;
 
-    if (dashTimer >= dashInterval)
+    // 2초 동안 대시 속도 증가
+    if (dashTimer >= dashInterval && !isDashing)
     {
-        isDashing = true;
-        dashTimer = 0.f;
+        isDashing = true;  // 대시 시작
+        dashTimer = 0.f;   // 타이머 초기화
     }
 
     if (isDashing)
     {
-        sf::Vector2f dashDirection = Utils::GetNormal(player->GetPosition() - enemy->GetPosition());
-        if (std::isnan(dashDirection.x) || std::isnan(dashDirection.y))
+        // 대시 속도 적용
+        enemy->SetPosition(enemy->GetPosition() + enemy->GetDirection() * enemy->GetSpeed() * dashSpeedMultiplier * dt);
+
+        // 2초 대시 후, 원래 속도로 돌아가기
+        if (dashTimer >= dashInterval)
         {
-
-            return;
+            isDashing = false;
+            dashTimer = 0.f;  // 타이머 초기화
         }
-
-        enemy->SetDirection(dashDirection);
-        enemy->SetPosition(enemy->GetPosition() + dashDirection * (enemy->GetSpeed() * 3.f) * dt); // 3배 속도로 돌진
-        isDashing = false;
-
     }
     else
     {
-        // 기본 이동
+        // 기본 속도
         enemy->SetPosition(enemy->GetPosition() + enemy->GetDirection() * enemy->GetSpeed() * dt);
     }
 }
