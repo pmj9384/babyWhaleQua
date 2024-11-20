@@ -2,6 +2,7 @@
 #include "Wave.h"
 #include "Enemy.h"
 #include "SceneGame.h"
+#include "UiHud.h"
 Wave::Wave()
 {
 }
@@ -153,6 +154,7 @@ void Wave::Reset()
     targetsToKill.clear();
     enemiesKilled.clear();
     spawnableTypes.clear();
+
 }
 
 void Wave::AddTargetToKill(Enemy::Types type, int count)
@@ -175,6 +177,7 @@ void Wave::EnemyKilled(Enemy::Types type)
     if (it != targetsToKill.end())
     {
         enemiesKilled[type]++;
+        int remaining = targetsToKill[type] - enemiesKilled[type];
     }
     else
     {

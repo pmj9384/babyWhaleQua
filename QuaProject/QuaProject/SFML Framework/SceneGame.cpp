@@ -82,6 +82,7 @@ void SceneGame::Init()
 	uiHealthbar = AddGo(new UiHealthBar("UiHealthBar"));
 	uiHealthbar->SetPlayer(player);
 
+
 	isPaused = true;
 
 	Scene::Init();
@@ -169,6 +170,7 @@ void SceneGame::Update(float dt)
 
 		if (currentWave->IsWaveComplete())
 		{
+		
 			// 기존 웨이브 삭제
 			delete currentWave;
 			currentWave = nullptr;
@@ -301,6 +303,10 @@ void SceneGame::OnPlayerDie(Player* player)
 {
 	player->SetActive(false);
 	isPaused = true;
+	if (uiHud)
+	{
+		uiHud->ShowGameOver(true); // 게임 오버 아이콘 표시
+	}
 }
 
 void SceneGame::PauseGame()

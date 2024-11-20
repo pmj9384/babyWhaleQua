@@ -8,13 +8,16 @@ protected:
 	sf::Text textHighScore;
 
 	sf::Sprite iconAmmoIcon;
+	sf::Sprite iconGameOver;
+
 	sf::Text textAmmo;
 	sf::RectangleShape gaugeHp;
 	sf::Text textWave;
 	sf::Text textZombieCount;
-
+	
 	sf::Vector2f gaugeHpMaxSize = { 400.f, 50.f };
 	int currentScore = 0;
+	bool isGameOverVisible = false;
 
 public:
 	UiHud(const std::string& name = "");
@@ -39,4 +42,6 @@ public:
 	void SetHp(int hp, int max);
 	void SetWave(int w);
 	void SetZombieCount(int count);
+	void ShowGameOver(bool show);
+
 };

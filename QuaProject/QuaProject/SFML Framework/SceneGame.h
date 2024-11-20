@@ -29,6 +29,7 @@ protected:
 
 	std::list<Item*> items;
 	ObjectPool<Item> itemPool;
+
 	Wave* currentWave;
 	float itemSpawnTimer = 0.0f;
 	float itemSpawnInterval = 20.0f;
