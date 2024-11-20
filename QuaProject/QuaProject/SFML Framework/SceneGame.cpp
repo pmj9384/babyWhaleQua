@@ -122,22 +122,30 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-
 	//player->Update(dt);
+	sf::Vector2i mousePos = InputMgr::GetMousePosition();
+	sf::Vector2f worldMousePos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePos, uiView);  
+
+	sf::Event event;
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
+	{
+		if (uiHud->IsButtonClicked(worldMousePos)) 
+		{
+			uiHud->isMainWindowVisible = false;  // 버튼 클릭 시 MainWindow 비활성화
+		}
+	}
 	if (isPaused)
 	{
 		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 		{
 			isPaused = false;
-
-			// uiStart->SetActive(false);
 		}
 		return;
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
 		isPaused = true;
-		// uiStart->SetActive(true);
 		return;
 	}
 	player->Update(dt);
@@ -219,6 +227,8 @@ void SceneGame::Update(float dt)
 		}
 
 		player->SetPosition(playerPos);
+
+
 		Scene::Update(dt);
 	}
 
@@ -491,6 +501,7 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 
 
 }
+
 
 
 

@@ -18,8 +18,17 @@ protected:
 	sf::Vector2f gaugeHpMaxSize = { 400.f, 50.f };
 	int currentScore = 0;
 	bool isGameOverVisible = false;
+	
+	HitBox buttonHitBox;           // 메인 화면 버튼
+	//bool isGameOverVisible;
+	float windowWidth = 1920.f;
+	float windowHeight = 1080.f;
+
+	float buttonWidth = 200.f;
+	float buttonHeight = 50.f;
 
 public:
+	bool isMainWindowVisible = true;
 	UiHud(const std::string& name = "");
 	~UiHud() = default;
 
@@ -42,8 +51,10 @@ public:
 	void SetHp(int hp, int max);
 	void SetWave(int w);
 	void SetZombieCount(int count);
-	void SetMainWindow(int m);
+
 
 	void ShowGameOver(bool show);
-
+	void SetMainWindow(int m);
+	bool IsButtonClicked(const sf::Vector2f& mousePos);
+	void HandleEvent(const sf::Event& event);
 };

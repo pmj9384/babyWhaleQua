@@ -47,6 +47,7 @@ void UiHud::Release()
 
 void UiHud::Reset()
 {
+
 	float textSize = 50.f;
 	sf::Font& font = FONT_MGR.Get("fonts/malgunbd.ttf");
 	textScore.setFont(font);
@@ -97,8 +98,15 @@ void UiHud::Reset()
 
 	iconAmmoIcon.setPosition(25.f, BottomY);
 	iconGameOver.setPosition(500.f, 500.f);
+
+
 	MainWindow.setPosition(500.f, 500.f);
 	MainWindow.setScale({ 0.5f,0.7f });
+
+	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };
+	buttonHitBox.UpdateTr(MainWindow, buttonArea);
+	buttonHitBox.SetVisible(true);
+
 
 	gaugeHp.setPosition(300.f, BottomY);
 
@@ -133,7 +141,11 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(iconGameOver);
 	}
-	window.draw(MainWindow);
+	if (isMainWindowVisible) // MainWindow의 가시성 확인
+	{
+		window.draw(MainWindow);
+		buttonHitBox.Draw(window);
+	}
 }
 
 void UiHud::SetScore(int s)
@@ -175,6 +187,26 @@ void UiHud::SetZombieCount(int count)
 void UiHud::SetMainWindow(int m)
 {
 	MainWindow.setScale({ 0.2f,0.2f });
+}
+
+bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
+{
+	return buttonHitBox.IsMouseOver(mousePos);
+}
+
+void UiHud::HandleEvent(const sf::Event& event)
+{
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		std::cout << "MouseButtonPressed event detected!" << std::endl;  // 로그 추가
+		sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+		std::cout << "Mouse Position: " << mousePos.x << ", " << mousePos.y << std::endl;  // 로그로 확인
+		if (buttonHitBox.IsMouseOver(sf::Vector2f(mousePos.x, mousePos.y)))
+		{
+			std::cout << "Button clicked! Disabling MainWindow." << std::endl;
+			isMainWindowVisible = false; // MainWindow를 비활성화
+		}
+	}
 }
 
 void UiHud::ShowGameOver(bool show)

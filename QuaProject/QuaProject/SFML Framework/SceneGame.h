@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Wave.h"
 #include "UiHealthBar.h"
+#include "UiHud.h"
 
 class Player;
 class Enemy;
@@ -39,7 +40,6 @@ public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
 	SpawnArea spawn3;
-
 
 	SceneGame();
 	virtual ~SceneGame() = default;
@@ -79,6 +79,6 @@ public:
 
 	void OnEnemyDefeated(Enemy::Types enemyType);
 
-
+	void ProcessEvents();
 };
 
