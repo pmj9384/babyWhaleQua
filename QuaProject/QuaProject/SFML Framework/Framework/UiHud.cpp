@@ -48,7 +48,7 @@ void UiHud::Release()
 void UiHud::Reset()
 {
 	float textSize = 50.f;
-	sf::Font& font = FONT_MGR.Get("fonts/zombiecontrol.ttf");
+	sf::Font& font = FONT_MGR.Get("fonts/malgunbd.ttf");
 	textScore.setFont(font);
 	textScore.setCharacterSize(textSize);
 	textScore.setFillColor(sf::Color::White);
@@ -83,11 +83,11 @@ void UiHud::Reset()
 
 	sf::Vector2f size = FRAMEWORK.GetWindowSizeF();
 
-	float topY = 25.f;
+	float topY = 10.f;
 	float BottomY = size.y - 25.f;
 
-	textScore.setPosition(25.f, topY);
-	textHighScore.setPosition(size.x - 25.f, topY);
+	textScore.setPosition(820.f, topY );
+	textHighScore.setPosition(size.x - 80.f, topY );
 
 	iconAmmoIcon.setPosition(25.f, BottomY);
 	gaugeHp.setPosition(300.f, BottomY);
@@ -123,7 +123,7 @@ void UiHud::Draw(sf::RenderWindow& window)
 
 void UiHud::SetScore(int s)
 {
-	textScore.setString("SCORE: " + std::to_string(s));
+	textScore.setString("" + std::to_string(s));
 	Utils::SetOrigin(textScore, Origins::TL);
 }
 

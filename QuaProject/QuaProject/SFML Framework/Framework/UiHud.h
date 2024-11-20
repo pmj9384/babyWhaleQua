@@ -14,6 +14,7 @@ protected:
 	sf::Text textZombieCount;
 
 	sf::Vector2f gaugeHpMaxSize = { 400.f, 50.f };
+	int currentScore = 0;
 
 public:
 	UiHud(const std::string& name = "");

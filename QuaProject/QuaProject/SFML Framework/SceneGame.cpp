@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "wave.h"
 #include "UiHealthBar.h"
+#include "UiHud.h"
 
 SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
@@ -24,11 +25,18 @@ void SceneGame::Init()
 	obj->SetPosition({ 0.0f, 0.0f });
 	obj->SetScale({ 1.0f * (1920.f / backgroundSize.x), 1.0f * (1080.f / backgroundSize.y)});
 
-
 	auto* player = new Player();
 	AddGo(player);
 	this->player = player;
+
 	SetPlayerLevel(1);
+	uiHud = AddGo(new UiHud("UiHud"));
+	if (uiHud)
+	{
+		uiHud->Init();
+		uiHud->SetScore(0); 
+	}
+	currentScore = 0; // SceneGame에서 점수 관리
 
 	GameObject* levelNum = AddGo( new SpriteGo("graphics/images/36.png", "LevelNumber"));
 	levelNum->sortingLayer = SortingLayers::UI;
@@ -136,7 +144,6 @@ void SceneGame::Update(float dt)
 		itemSpawnTimer -= itemSpawnInterval; // 타이머 초기화
 		SpawnItem(1); // 아이템 스폰
 	}
-
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신
@@ -156,16 +163,17 @@ void SceneGame::Update(float dt)
 
 			// 새로운 웨이브 생성
 			currentWave = new Wave();
-			currentWave->Reset();
+
 			playerLevel++; // 플레이어 레벨 증가
 			SetPlayerLevel(playerLevel); // 플레이어 레벨에 따라 적 허용 타입 설정
-
+			currentWave->Reset();
 			// 다음 웨이브 타입 설정
 			Wave::Types nextWaveType = static_cast<Wave::Types>(playerLevel);
 			if (nextWaveType <= Wave::Types::Wave10) // 최대 웨이브 확인
 			{
 				currentWave->SetType(nextWaveType);
 				currentWave->StartWave();
+
 				std::cout << "Started Wave " << static_cast<int>(nextWaveType) << std::endl;
 			}
 			else
@@ -195,9 +203,11 @@ void SceneGame::Update(float dt)
 		{
 			playerPos.y = bounds.top + bounds.height - 250;
 		}
+
 		player->SetPosition(playerPos);
 		Scene::Update(dt);
 	}
+
 }
 void SceneGame::Draw(sf::RenderWindow& window)
 {
@@ -205,7 +215,10 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	spawn1.Draw(window); // spawndraw
 	spawn2.Draw(window); // spawndraw
 	spawn3.Draw(window);
-
+	if (uiHud)
+	{
+		uiHud->Draw(window);
+	}
 }
 
 
@@ -365,6 +378,7 @@ void SceneGame::SetPlayerLevel(int level)
 	{
 		levelNum->SetTexture(TEXTURE_MGR.Get(levelImageId));
 	}
+
 }
 
 void SceneGame::IncrementPlayerLevel()
@@ -409,6 +423,15 @@ void SceneGame::CheckCollisions()
 
 }
 
+void SceneGame::OnPlayerScore(int scoreDelta)
+{
+	currentScore += scoreDelta; // 점수 갱신
+	if (uiHud)
+	{
+		uiHud->SetScore(currentScore); // HUD에 점수 업데이트
+	}
+}
+
 void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 {
 	if (currentWave)
@@ -416,6 +439,11 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 		if (enemyType != Enemy::Types::none)
 		{
 			currentWave->EnemyKilled(enemyType); // 적 처치 카운트 증가
+			currentScore += 100; // 100점 추가
+			if (uiHud)
+			{
+				uiHud->SetScore(currentScore); // HUD 점수 업데이트
+			}
 		}
 	}
 

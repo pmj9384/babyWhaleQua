@@ -10,6 +10,7 @@ class Player;
 class Enemy;
 class wave;
 class UiHealthBar;
+class UiHud;
 
 class SceneGame : public Scene {
 	friend class Enemy;
@@ -20,6 +21,8 @@ protected:
 
 	int playerLevel = 1;
 
+	UiHud* uiHud;
+
 	std::list<Enemy*> enemys;
 	ObjectPool<Enemy> enemyPool;
 
@@ -29,7 +32,7 @@ protected:
 	float itemSpawnTimer = 0.0f;
 	float itemSpawnInterval = 20.0f;
 	bool isPaused = false;
-
+	int currentScore = 0;
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
@@ -70,7 +73,10 @@ public:
 	void OnEnemyCatch(Enemy* enemy);
 	void CheckCollisions();
 
+	void OnPlayerScore(int scoreDelta);
+
 	void OnEnemyDefeated(Enemy::Types enemyType);
+
 
 };
 
