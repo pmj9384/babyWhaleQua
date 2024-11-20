@@ -16,6 +16,7 @@ class SceneGame : public Scene {
 	friend class Enemy;
 protected:
 	sf::Sprite levelNumber;
+	sf::Sprite missionUi;
 	Player* player;
 	UiHealthBar* uiHealthbar;
 
