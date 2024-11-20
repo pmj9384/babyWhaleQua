@@ -9,7 +9,7 @@ protected:
 
 	sf::Sprite iconAmmoIcon;
 	sf::Sprite iconGameOver;
-
+	sf::Sprite MainWindow;
 	sf::Text textAmmo;
 	sf::RectangleShape gaugeHp;
 	sf::Text textWave;
@@ -42,6 +42,8 @@ public:
 	void SetHp(int hp, int max);
 	void SetWave(int w);
 	void SetZombieCount(int count);
+	void SetMainWindow(int m);
+
 	void ShowGameOver(bool show);
 
 };

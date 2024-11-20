@@ -84,6 +84,9 @@ void UiHud::Reset()
 	iconGameOver.setTexture(TEXTURE_MGR.Get("graphics/sprites/GameOver_214/1.png"));
 	Utils::SetOrigin(iconGameOver, Origins::MC);
 
+
+	MainWindow.setTexture(TEXTURE_MGR.Get("graphics/frames/main.png"));
+	Utils::SetOrigin(MainWindow, Origins::MC);
 	sf::Vector2f size = FRAMEWORK.GetWindowSizeF();
 
 	float topY = 10.f;
@@ -94,6 +97,9 @@ void UiHud::Reset()
 
 	iconAmmoIcon.setPosition(25.f, BottomY);
 	iconGameOver.setPosition(500.f, 500.f);
+	MainWindow.setPosition(500.f, 500.f);
+	MainWindow.setScale({ 0.5f,0.7f });
+
 	gaugeHp.setPosition(300.f, BottomY);
 
 	textAmmo.setPosition(100.f, BottomY);
@@ -127,7 +133,7 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(iconGameOver);
 	}
-
+	window.draw(MainWindow);
 }
 
 void UiHud::SetScore(int s)
@@ -164,6 +170,11 @@ void UiHud::SetZombieCount(int count)
 {
 	textZombieCount.setString("ZOMBIES: " + std::to_string(count));
 	Utils::SetOrigin(textZombieCount, Origins::BR);
+}
+
+void UiHud::SetMainWindow(int m)
+{
+	MainWindow.setScale({ 0.2f,0.2f });
 }
 
 void UiHud::ShowGameOver(bool show)
