@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "UiHud.h"
-
+#include "Enemy.h"
 UiHud::UiHud(const std::string& name)
 	: GameObject(name)
 {
@@ -48,7 +48,7 @@ void UiHud::Release()
 void UiHud::Reset()
 {
 	float textSize = 50.f;
-	sf::Font& font = FONT_MGR.Get("fonts/zombiecontrol.ttf");
+	sf::Font& font = FONT_MGR.Get("fonts/malgunbd.ttf");
 	textScore.setFont(font);
 	textScore.setCharacterSize(textSize);
 	textScore.setFillColor(sf::Color::White);
@@ -81,15 +81,25 @@ void UiHud::Reset()
 	iconAmmoIcon.setTexture(TEXTURE_MGR.Get("graphics/ammo_icon.png"));
 	Utils::SetOrigin(iconAmmoIcon, Origins::BL);
 
+	iconGameOver.setTexture(TEXTURE_MGR.Get("graphics/sprites/GameOver_214/1.png"));
+	Utils::SetOrigin(iconGameOver, Origins::MC);
+
+
+	MainWindow.setTexture(TEXTURE_MGR.Get("graphics/frames/main.png"));
+	Utils::SetOrigin(MainWindow, Origins::MC);
 	sf::Vector2f size = FRAMEWORK.GetWindowSizeF();
 
-	float topY = 25.f;
+	float topY = 10.f;
 	float BottomY = size.y - 25.f;
 
-	textScore.setPosition(25.f, topY);
-	textHighScore.setPosition(size.x - 25.f, topY);
+	textScore.setPosition(820.f, topY );
+	textHighScore.setPosition(size.x - 80.f, topY );
 
 	iconAmmoIcon.setPosition(25.f, BottomY);
+	iconGameOver.setPosition(500.f, 500.f);
+	MainWindow.setPosition(500.f, 500.f);
+	MainWindow.setScale({ 0.5f,0.7f });
+
 	gaugeHp.setPosition(300.f, BottomY);
 
 	textAmmo.setPosition(100.f, BottomY);
@@ -97,7 +107,7 @@ void UiHud::Reset()
 	textWave.setPosition(size.x - 400.f, BottomY);
 	textZombieCount.setPosition(size.x - 25.f, BottomY);
 
-
+	isGameOverVisible = false;
 	SetScore(0);
 	SetHiScore(0);
 	SetAmmo(0, 0);
@@ -119,11 +129,16 @@ void UiHud::Draw(sf::RenderWindow& window)
 	window.draw(textAmmo);
 	window.draw(textWave);
 	window.draw(textZombieCount);
+	if (isGameOverVisible)
+	{
+		window.draw(iconGameOver);
+	}
+	window.draw(MainWindow);
 }
 
 void UiHud::SetScore(int s)
 {
-	textScore.setString("SCORE: " + std::to_string(s));
+	textScore.setString("" + std::to_string(s));
 	Utils::SetOrigin(textScore, Origins::TL);
 }
 
@@ -156,3 +171,17 @@ void UiHud::SetZombieCount(int count)
 	textZombieCount.setString("ZOMBIES: " + std::to_string(count));
 	Utils::SetOrigin(textZombieCount, Origins::BR);
 }
+
+void UiHud::SetMainWindow(int m)
+{
+	MainWindow.setScale({ 0.2f,0.2f });
+}
+
+void UiHud::ShowGameOver(bool show)
+{
+	isGameOverVisible = show;
+}
+
+
+
+

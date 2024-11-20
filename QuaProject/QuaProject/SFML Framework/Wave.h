@@ -2,9 +2,10 @@
 #include "GameObject.h"
 #include "Enemy.h"
 #include "SceneGame.h"
+
 class Enemy;
 class SceneGame;
-
+class UiHud;
 class Wave
 {
 public:
@@ -31,7 +32,7 @@ protected:
 	float waveTimer;
 	float spawnInterval;
 	bool waveActive;
-
+	UiHud* uiHud;
 	std::map<Enemy::Types, int> targetsToKill;  // 적 타입별 목표 수
 	std::map<Enemy::Types, int> enemiesKilled; // 적 타입별 처치된 수
 	std::vector<Enemy::Types> spawnableTypes;
@@ -63,7 +64,7 @@ public:
 
 	bool CanSpawnEnemy() const;
 	void IncrementSpawnedEnemies();
-
+	void SetUiHud(UiHud* hud) { uiHud = hud; }
 
 	Enemy::Types GetRandomTargetType() const;
 };

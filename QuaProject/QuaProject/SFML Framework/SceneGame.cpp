@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "wave.h"
 #include "UiHealthBar.h"
+#include "UiHud.h"
 
 SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
@@ -24,8 +25,39 @@ void SceneGame::Init()
 	obj->SetPosition({ 0.0f, 0.0f });
 	obj->SetScale({ 1.0f * (1920.f / backgroundSize.x), 1.0f * (1080.f / backgroundSize.y)});
 
+	auto* player = new Player();
+	AddGo(player);
+	this->player = player;
 
-	player = AddGo(new Player("Player"));
+	SetPlayerLevel(1);
+	uiHud = AddGo(new UiHud("UiHud"));
+	if (uiHud)
+	{
+		uiHud->Init();
+		uiHud->SetScore(0); 
+	}
+	currentScore = 0; // SceneGame에서 점수 관리
+
+	GameObject* levelNum = AddGo( new SpriteGo("graphics/images/36.png", "LevelNumber"));
+	levelNum->sortingLayer = SortingLayers::UI;
+	levelNum->sortingOrder = 1;
+	levelNum->SetPosition({ 105.0f, windowSize.y-215.f });
+	levelNum->SetScale({ 2.f,3.f });
+	if (TEXTURE_MGR.Load("graphics/images/36.png"))
+	{
+		levelNum->SetTexture(TEXTURE_MGR.Get("graphics/images/36.png"));
+	}
+	
+	GameObject* missionUi = AddGo(new SpriteGo("graphics/sprites/UiEnermybar_89/mission1.png","MissionUi"));
+	missionUi->sortingLayer = SortingLayers::UI;
+	missionUi->sortingOrder = 1;
+	missionUi->SetPosition({ 275.0f, windowSize.y - 260.f });
+	missionUi->SetScale({ 1.f,1.0f });
+	if (TEXTURE_MGR.Load("graphics/sprites/UiEnergybar_89/mission1.png"))
+	{
+		missionUi->SetTexture(TEXTURE_MGR.Get("graphics/sprites/UiEnermybar_89/mission1.png"));
+	}
+
 
 	spawn1.SetPosition( -100.0f, 0.0f);
 	spawn1.SetSize(100.f, backgroundSize.y-500);
@@ -49,6 +81,7 @@ void SceneGame::Init()
 
 	uiHealthbar = AddGo(new UiHealthBar("UiHealthBar"));
 	uiHealthbar->SetPlayer(player);
+
 
 	isPaused = true;
 
@@ -124,7 +157,6 @@ void SceneGame::Update(float dt)
 		itemSpawnTimer -= itemSpawnInterval; // 타이머 초기화
 		SpawnItem(1); // 아이템 스폰
 	}
-
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신
@@ -138,22 +170,24 @@ void SceneGame::Update(float dt)
 
 		if (currentWave->IsWaveComplete())
 		{
+		
 			// 기존 웨이브 삭제
 			delete currentWave;
 			currentWave = nullptr;
 
 			// 새로운 웨이브 생성
 			currentWave = new Wave();
-			currentWave->Reset();
+
 			playerLevel++; // 플레이어 레벨 증가
 			SetPlayerLevel(playerLevel); // 플레이어 레벨에 따라 적 허용 타입 설정
-
+			currentWave->Reset();
 			// 다음 웨이브 타입 설정
 			Wave::Types nextWaveType = static_cast<Wave::Types>(playerLevel);
 			if (nextWaveType <= Wave::Types::Wave10) // 최대 웨이브 확인
 			{
 				currentWave->SetType(nextWaveType);
 				currentWave->StartWave();
+
 				std::cout << "Started Wave " << static_cast<int>(nextWaveType) << std::endl;
 			}
 			else
@@ -183,9 +217,11 @@ void SceneGame::Update(float dt)
 		{
 			playerPos.y = bounds.top + bounds.height - 250;
 		}
+
 		player->SetPosition(playerPos);
 		Scene::Update(dt);
 	}
+
 }
 void SceneGame::Draw(sf::RenderWindow& window)
 {
@@ -193,7 +229,10 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	spawn1.Draw(window); // spawndraw
 	spawn2.Draw(window); // spawndraw
 	spawn3.Draw(window);
-
+	if (uiHud)
+	{
+		uiHud->Draw(window);
+	}
 }
 
 
@@ -264,6 +303,10 @@ void SceneGame::OnPlayerDie(Player* player)
 {
 	player->SetActive(false);
 	isPaused = true;
+	if (uiHud)
+	{
+		uiHud->ShowGameOver(true); // 게임 오버 아이콘 표시
+	}
 }
 
 void SceneGame::PauseGame()
@@ -287,40 +330,77 @@ void SceneGame::ApplyUpgrade(int selectedUpgrade)
 void SceneGame::SetPlayerLevel(int level)
 {
 	std::vector<Enemy::Types> allowedTypes;
-
+	std::string textureId;
+	std::string levelImageId;
+	std::string missionTextureId;
 	switch (level)
 	{
 	case 1:
 		allowedTypes = { Enemy::Types::smallFish }; // 레벨 1에서는 smallFish만 잡을 수 있음
+		textureId = "graphics/images/91.png";
+		levelImageId = "graphics/images/36.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
 		break;
 	case 2:
 		allowedTypes = { Enemy::Types::smallFish };
+		textureId = "graphics/images/105.png";
+		levelImageId = "graphics/images/38.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
 		break;
 	case 3:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		textureId = "graphics/images/116.png";
+		levelImageId = "graphics/images/40.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
 		break;
 	case 4:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
+		textureId = "graphics/images/127.png";
+		levelImageId = "graphics/images/42.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
+
 		break;
 	case 5:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/138.png";
+		levelImageId = "graphics/images/44.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+
 		break;
 	case 6:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/149.png";
+		levelImageId = "graphics/images/46.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+
 		break;
 	case 7:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
+		textureId = "graphics/images/160.png";
+		levelImageId = "graphics/images/48.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+
 		break;
 	case 8:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+		textureId = "graphics/images/171.png";
+		levelImageId = "graphics/images/50.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
+
 		break;
 	case 9:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
+		textureId = "graphics/images/182.png";
+		levelImageId = "graphics/images/52.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
+
 
 		break;
 	case 10:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-
+		textureId = "graphics/images/193.png";
+		levelImageId = "graphics/images/54.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
 		break;
 	default:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
@@ -328,6 +408,19 @@ void SceneGame::SetPlayerLevel(int level)
 	}
 
 	player->SetAllowedEnemyTypes(allowedTypes);
+	player->ChangeTexture(textureId);
+
+	GameObject* levelNum = FindGo("LevelNumber");
+	if (levelNum)
+	{
+		levelNum->SetTexture(TEXTURE_MGR.Get(levelImageId));
+	}
+	GameObject* missionUi = FindGo("MissionUi");
+	if (missionUi)
+	{
+		missionUi->SetTexture(TEXTURE_MGR.Get(missionTextureId));
+	}
+	
 }
 
 void SceneGame::IncrementPlayerLevel()
@@ -372,6 +465,15 @@ void SceneGame::CheckCollisions()
 
 }
 
+void SceneGame::OnPlayerScore(int scoreDelta)
+{
+	currentScore += scoreDelta; // 점수 갱신
+	if (uiHud)
+	{
+		uiHud->SetScore(currentScore); // HUD에 점수 업데이트
+	}
+}
+
 void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 {
 	if (currentWave)
@@ -379,6 +481,11 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 		if (enemyType != Enemy::Types::none)
 		{
 			currentWave->EnemyKilled(enemyType); // 적 처치 카운트 증가
+			currentScore += 100; // 100점 추가
+			if (uiHud)
+			{
+				uiHud->SetScore(currentScore); // HUD 점수 업데이트
+			}
 		}
 	}
 

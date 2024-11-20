@@ -68,6 +68,10 @@ void Player::Reset()
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
 
 	body.setTexture(TEXTURE_MGR.Get(textureId), true);
+	//if (!textureId.empty())
+	//{
+	//	ChangeTexture(textureId);
+	//}
 	SetOrigin(originPreset);
 	SetPosition({ 500.f,450.f });
 	SetRotation(0.f);
@@ -354,6 +358,17 @@ void Player::OnCollisionWithEnemy(Enemy* enemy)
 
 		// 적을 비활성화
 		enemy->Deactivate(0.2f);
+	}
+}
+
+void Player::ChangeTexture(const std::string& textureId)
+{
+	if (!textureId.empty() && TEXTURE_MGR.Load(textureId)) // 텍스처 로드
+	{
+		body.setTexture(TEXTURE_MGR.Get(textureId)); // 텍스처 적용
+		const sf::Texture& tex = TEXTURE_MGR.Get(textureId); // 
+		body.setTexture(tex);
+		body.setTextureRect({ 0, 0, (int)tex.getSize().x, (int)tex.getSize().y });
 	}
 }
 
