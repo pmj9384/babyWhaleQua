@@ -131,7 +131,7 @@ void UiHud::Reset()
 
 	sf::FloatRect buttonArea4 = { 300.f, 687.f, 80.f, 30.f };
 	buttonHitBox4.UpdateTr(iconGameClear, buttonArea4);
-	buttonHitBox4.SetVisible(true);
+	buttonHitBox4.SetVisible(false);
 
 //	gaugeHp.setPosition(300.f, BottomY);
 

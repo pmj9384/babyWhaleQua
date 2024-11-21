@@ -53,10 +53,11 @@ void SceneGame::Init()
 	missionUi->sortingOrder = -1;
 	missionUi->SetPosition({ 270.0f, windowSize.y - 250.f });
 	missionUi->SetScale({ 0.8f,1.0f });
-	if (TEXTURE_MGR.Load("graphics/sprites/UiEnergybar_89/mission1.png"))
-	{
-		missionUi->SetTexture(TEXTURE_MGR.Get("graphics/sprites/UiEnermybar_89/mission1.png"));
-	}
+
+	//if (TEXTURE_MGR.Load("graphics/sprites/UiEnermybar_89/mission1.png"))
+	//{
+	//	missionUi->SetTexture(TEXTURE_MGR.Get("graphics/sprites/UiEnermybar_89/mission1.png"));
+	//}
 
 
 	spawn1.SetPosition( -100.0f, 400.0f);
@@ -269,7 +270,8 @@ void SceneGame::Update(float dt)
 			else
 			{
 				std::cout << "No more waves! Game complete!" << std::endl;
-				currentWave = nullptr; // 게임 종료 상태로 전환
+				//currentWave = nullptr; // 게임 종료 상태로 전환
+				isPaused =true;
 				uiHud->isGameClearVisible = true;
 			}
 		}
@@ -469,7 +471,6 @@ void SceneGame::SetPlayerLevel(int level)
 		levelImageId = "graphics/images/52.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
 
-
 		break;
 	case 10:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
@@ -489,11 +490,15 @@ void SceneGame::SetPlayerLevel(int level)
 	if (levelNum)
 	{
 		levelNum->SetTexture(TEXTURE_MGR.Get(levelImageId));
+		std::cout << "[DEBUG] LevelNumber Active: " << levelNum->IsActive() << std::endl;
+		std::cout << "[DEBUG] LevelNumber Texture: " << levelImageId << std::endl;
 	}
 	GameObject* missionUi = FindGo("MissionUi");
 	if (missionUi)
 	{
 		missionUi->SetTexture(TEXTURE_MGR.Get(missionTextureId));
+		std::cout << "[DEBUG] MissionUi Active: " << missionUi->IsActive() << std::endl;
+		std::cout << "[DEBUG] MissionUi Texture: " << missionTextureId << std::endl;
 	}
 	
 }

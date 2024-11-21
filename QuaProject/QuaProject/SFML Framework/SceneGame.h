@@ -34,8 +34,9 @@ protected:
 
 	Wave* currentWave;
 	float itemSpawnTimer = 0.0f;
-	float itemSpawnInterval = 20.0f;
-
+	//float itemSpawnInterval = 20.0f;
+	float itemSpawnInterval = 5.0f;
+	
 	float spawnTimer = 0.0f;
 	float spawnInterval = 0.5f;
 	bool isPaused = false;
