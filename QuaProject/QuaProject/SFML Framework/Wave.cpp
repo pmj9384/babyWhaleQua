@@ -155,6 +155,7 @@ void Wave::Reset()
     enemiesKilled.clear();
     spawnableTypes.clear();
 
+
 }
 
 void Wave::AddTargetToKill(Enemy::Types type, int count)

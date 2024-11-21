@@ -11,8 +11,11 @@ protected:
 	sf::Text textHighScore;
 
 	sf::Sprite iconAmmoIcon;
+
 	sf::Sprite iconGameOver;
+	sf::Sprite iconGameClear;
 	sf::Sprite MainWindow;
+
 	sf::Text textAmmo;
 	sf::RectangleShape gaugeHp;
 	sf::Text textWave;
@@ -25,6 +28,10 @@ protected:
 	HitBox buttonHitBox;           // 메인 화면 버튼
 	HitBox buttonHitBox2;
 	HitBox buttonHitBox3;
+	HitBox buttonHitBox4;
+
+
+
 	//bool isGameOverVisible;
 	float windowWidth = 1920.f;
 	float windowHeight = 1080.f;
@@ -34,6 +41,7 @@ protected:
 
 public:
 
+	bool isGameClearVisible = true;
 	bool isMainWindowVisible = true;
 	bool isGameOverVisible = true;
 	UiHud(const std::string& name = "");

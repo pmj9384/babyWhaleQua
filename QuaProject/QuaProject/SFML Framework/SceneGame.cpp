@@ -169,8 +169,44 @@ void SceneGame::Update(float dt)
 				enemys.clear(); // 컨테이너 비우기
 
 				spawnTimer = 0.f;
-				SetPlayerLevel(1);
-				currentWave->SetType(Wave::Types::Wave1);
+				playerLevel = 1;
+				SetPlayerLevel(playerLevel);
+
+				if (currentWave)
+				{
+					currentWave->Reset();
+					currentWave->SetType(Wave::Types::Wave1); // 첫 번째 웨이브 설정
+					currentWave->StartWave();
+				}
+			}
+			if (!uiHud->isGameClearVisible)
+			{
+				if (wave)
+					wave->Reset();
+				if (player)
+					player->Reset();
+				if (uiHud)
+					uiHud->Reset();
+				if (enemy)
+					enemy->Reset();
+				if (uiHealthbar)
+					uiHealthbar->Reset();
+				for (auto& enemy : enemys)
+				{
+					enemy->SetActive(false); // 적 비활성화
+				}
+				enemys.clear(); // 컨테이너 비우기
+
+				spawnTimer = 0.f;
+				playerLevel = 1;
+				SetPlayerLevel(playerLevel);
+
+				if (currentWave)
+				{
+					currentWave->Reset();
+					currentWave->SetType(Wave::Types::Wave1); // 첫 번째 웨이브 설정
+					currentWave->StartWave();
+				}
 			}
 		}
 	}
@@ -244,6 +280,7 @@ void SceneGame::Update(float dt)
 			{
 				std::cout << "No more waves! Game complete!" << std::endl;
 				currentWave = nullptr; // 게임 종료 상태로 전환
+				uiHud->isGameClearVisible = true;
 			}
 		}
 		GameObject* obj = static_cast<GameObject*>(FindGo("graphics/images/Background.png"));

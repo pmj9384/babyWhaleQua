@@ -85,6 +85,9 @@ void UiHud::Reset()
 	iconGameOver.setTexture(TEXTURE_MGR.Get("graphics/sprites/GameOver_214/1.png"));
 	Utils::SetOrigin(iconGameOver, Origins::MC);
 
+	iconGameClear.setTexture(TEXTURE_MGR.Get("graphics/sprites/AllClear_221/10.png"));
+	Utils::SetOrigin(iconGameOver, Origins::MC);
+
 
 	MainWindow.setTexture(TEXTURE_MGR.Get("graphics/frames/main.png"));
 	Utils::SetOrigin(MainWindow, Origins::MC);
@@ -102,8 +105,14 @@ void UiHud::Reset()
 	iconGameOver.setScale({ 1.5f,1.5f });
 
 
+	iconGameClear.setPosition(280.f, 80.f);
+	iconGameClear.setScale({ 1.3f,2.3f });
+
+
 	MainWindow.setPosition(500.f, 500.f);
 	MainWindow.setScale({ 0.5f,0.7f });
+
+
 
 	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };
 	buttonHitBox.UpdateTr(MainWindow, buttonArea);
@@ -119,6 +128,10 @@ void UiHud::Reset()
 	buttonHitBox3.SetVisible(false);
 
 
+	sf::FloatRect buttonArea4 = { 300.f, 687.f, 80.f, 30.f };
+	buttonHitBox4.UpdateTr(iconGameClear, buttonArea4);
+	buttonHitBox4.SetVisible(true);
+
 //	gaugeHp.setPosition(300.f, BottomY);
 
 //	textAmmo.setPosition(100.f, BottomY);
@@ -127,6 +140,7 @@ void UiHud::Reset()
 //	textZombieCount.setPosition(size.x - 25.f, BottomY);
 
 	isGameOverVisible = false;
+	isGameClearVisible = false;
 	SetScore(0);
 //	SetHiScore(0);
 //	SetAmmo(0, 0);
@@ -148,6 +162,8 @@ void UiHud::Draw(sf::RenderWindow& window)
 	window.draw(textAmmo);
 	window.draw(textWave);
 	window.draw(textZombieCount);
+
+
 	if (isGameOverVisible)
 	{
 		window.draw(iconGameOver);
@@ -159,6 +175,12 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(MainWindow);
 		buttonHitBox.Draw(window);
+	}
+	if (isGameClearVisible)
+	{
+		window.draw(iconGameClear);
+		buttonHitBox4.Draw(window);
+
 	}
 }
 
@@ -223,6 +245,13 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	if (buttonHitBox3.IsMouseOver(mousePos))
 	{
 		isGameOverVisible = false;  // GameOver UI 비활성화
+		isMainWindowVisible = true;
+		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+		return true;
+	}
+	if (buttonHitBox4.IsMouseOver(mousePos))
+	{
+		isGameClearVisible = false;  // GameOver UI 비활성화
 		isMainWindowVisible = true;
 		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
 		return true;
