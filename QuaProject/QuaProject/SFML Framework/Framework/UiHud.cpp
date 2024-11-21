@@ -107,16 +107,16 @@ void UiHud::Reset()
 
 	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };
 	buttonHitBox.UpdateTr(MainWindow, buttonArea);
-	buttonHitBox.SetVisible(true);
+	buttonHitBox.SetVisible(false);
 
 
 	sf::FloatRect buttonArea2 = { 30.f, 85.f, 80.f, 40.f };
 	buttonHitBox2.UpdateTr(iconGameOver, buttonArea2);
-	buttonHitBox2.SetVisible(true);
+	buttonHitBox2.SetVisible(false);
 
-	sf::FloatRect buttonArea3 = { 200.f, 85.f, 80.f, 40.f };
+	sf::FloatRect buttonArea3 = { 180.f, 85.f, 80.f, 40.f };
 	buttonHitBox3.UpdateTr(iconGameOver, buttonArea3);
-	buttonHitBox3.SetVisible(true);
+	buttonHitBox3.SetVisible(false);
 
 
 //	gaugeHp.setPosition(300.f, BottomY);
