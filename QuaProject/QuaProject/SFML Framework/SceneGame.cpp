@@ -40,7 +40,7 @@ void SceneGame::Init()
 
 	GameObject* levelNum = AddGo( new SpriteGo("graphics/images/36.png", "LevelNumber"));
 	levelNum->sortingLayer = SortingLayers::UI;
-	levelNum->sortingOrder = 1;
+	levelNum->sortingOrder = -1;
 	levelNum->SetPosition({ 105.0f, windowSize.y-215.f });
 	levelNum->SetScale({ 2.f,3.f });
 	if (TEXTURE_MGR.Load("graphics/images/36.png"))
@@ -50,7 +50,7 @@ void SceneGame::Init()
 	
 	GameObject* missionUi = AddGo(new SpriteGo("graphics/sprites/UiEnermybar_89/mission1.png","MissionUi"));
 	missionUi->sortingLayer = SortingLayers::UI;
-	missionUi->sortingOrder = 1;
+	missionUi->sortingOrder = -1;
 	missionUi->SetPosition({ 270.0f, windowSize.y - 250.f });
 	missionUi->SetScale({ 0.8f,1.0f });
 	if (TEXTURE_MGR.Load("graphics/sprites/UiEnergybar_89/mission1.png"))
@@ -100,17 +100,11 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	TEXTURE_MGR.Load("graphics/images/Background.png");
-
-	//sf::Vector2f size = FRAMEWORK.GetWindowSizeF();
-	//worldView.setSize(FRAMEWORK.GetWindowSizeF());
-	//uiView.setSize(FRAMEWORK.GetWindowSizeF());
-	//worldView.setCenter(0.f, 0.f);
 	Scene::Enter();
 }
 
 void SceneGame::Reset()
 {
-	std::cout << "SceneGame::Reset 호출됨" << std::endl;
 
 	wave->Reset();
 	player->Reset();
@@ -118,19 +112,13 @@ void SceneGame::Reset()
 	enemy->Reset();
 	uiHealthbar->Reset();
 
-	std::cout << "SceneGame::Reset 완료" << std::endl;
+
 }
 
 void SceneGame::Exit()
 {
 	TEXTURE_MGR.Unload("graphics/images/Background.png");
-	for (auto enemy : enemys)
-	{
 
-		RemoveGo(enemy);
-		enemyPool.Return(enemy);
-	}
-	enemys.clear();
 	Scene::Exit();
 }
 
@@ -139,8 +127,6 @@ void SceneGame::Update(float dt)
 	//player->Update(dt);
 	sf::Vector2i mousePos = InputMgr::GetMousePosition();
 	sf::Vector2f worldMousePos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePos, uiView);  
-
-	sf::Event event;
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -170,6 +156,7 @@ void SceneGame::Update(float dt)
 
 				spawnTimer = 0.f;
 				playerLevel = 1;
+				currentScore = 0;
 				SetPlayerLevel(playerLevel);
 
 				if (currentWave)
@@ -177,6 +164,10 @@ void SceneGame::Update(float dt)
 					currentWave->Reset();
 					currentWave->SetType(Wave::Types::Wave1); // 첫 번째 웨이브 설정
 					currentWave->StartWave();
+				}
+				if (uiHud)
+				{
+					uiHud->SetScore(currentScore);
 				}
 			}
 			if (!uiHud->isGameClearVisible)
@@ -199,6 +190,7 @@ void SceneGame::Update(float dt)
 
 				spawnTimer = 0.f;
 				playerLevel = 1;
+				currentScore = 0;
 				SetPlayerLevel(playerLevel);
 
 				if (currentWave)
@@ -206,6 +198,10 @@ void SceneGame::Update(float dt)
 					currentWave->Reset();
 					currentWave->SetType(Wave::Types::Wave1); // 첫 번째 웨이브 설정
 					currentWave->StartWave();
+				}
+				if (uiHud)
+				{
+					uiHud->SetScore(currentScore);
 				}
 			}
 		}
@@ -222,12 +218,6 @@ void SceneGame::Update(float dt)
 	{
 		isPaused = true;
 		return;
-	}
-	player->Update(dt);
-
-	for (auto& enemy : enemys)
-	{
-		enemy->Update(dt);
 	}
 	if (uiHealthbar)
 	{
@@ -307,10 +297,8 @@ void SceneGame::Update(float dt)
 
 		player->SetPosition(playerPos);
 
-
-		Scene::Update(dt);
 	}
-
+	Scene::Update(dt);
 }
 void SceneGame::Draw(sf::RenderWindow& window)
 {
@@ -318,10 +306,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	spawn1.Draw(window); // spawndraw
 	spawn2.Draw(window); // spawndraw
 	spawn3.Draw(window);
-	if (uiHud)
-	{
-		uiHud->Draw(window);
-	}
+		
 }
 
 
@@ -356,19 +341,20 @@ void SceneGame::SpawnEnemy(int count)
 		{
 			continue;
 		}
-		enemys.push_back(enemy);
-
 		enemy->SetSceneGame(this);
+		enemy->SetPlayer(player);
+
+		
 		Enemy::Types enemyType = currentWave->GetRandomTargetType();
 		enemy->SetType(enemyType);
-		enemy->SetPlayer(player);
+
 
 
 		// spawn1 또는 spawn2에서 랜덤하게 스폰 위치 선택
 		sf::Vector2f spawnPosition;
 		sf::Vector2f direction;
 
-		if (Utils::RandomRange(0, 1) == 0) 
+		if (Utils::RandomRange(0, 1) == 0)
 		{
 			spawnPosition = spawn1.Spawn(); // 왼쪽 스폰 위치
 			direction = sf::Vector2f(1.f, 0.f);
@@ -381,9 +367,9 @@ void SceneGame::SpawnEnemy(int count)
 
 		enemy->SetPosition(spawnPosition); // 적의 위치를 스폰 위치로 설정
 		enemy->SetDirection(direction);
-
+		enemys.push_back(enemy);
 		AddGo(enemy);
-		enemy->SetActive(true);
+		//enemy->SetActive(true);
 
 	}
 }
@@ -584,7 +570,7 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 void SceneGame::OnWaveComplete()
 {
 	// 웨이브가 끝날 때마다 처리된 적들을 리셋
-	player->processedEnemies.clear();  // `Player`에서 `processedEnemies`를 초기화
+	//player->processedEnemies.clear();  // `Player`에서 `processedEnemies`를 초기화
 
 	//// 웨이브가 끝날 때 적들을 비활성화
 	//for (auto& enemy : enemys)
@@ -610,11 +596,13 @@ void SceneGame::OnWaveComplete()
 	std::cout << "Started Wave " << playerLevel << std::endl;
 
 	// 새로운 웨이브의 적을 다시 활성화
-	for (auto& enemy : enemys)
-	{
-		enemy->SetActive(true);  // 새 웨이브에서 적을 다시 활성화
-	}
+	//for (auto& enemy : enemys)
+	//{
+	//	enemy->SetActive(true);  // 새 웨이브에서 적을 다시 활성화
+	//}
 }
+
+
 
 
 

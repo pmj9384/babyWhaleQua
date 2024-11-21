@@ -79,7 +79,8 @@ void Player::Reset()
 	hp = maxHp; // 체력을 최대치로 리셋
 	UpdateHealthBar();
 
-
+	//processedEnemies.clear(); // new
+	//lastCollidedEnemy = nullptr; // new
 	maxHealth = 100;
 	runSpeed = 1.0f;
 	SetActive(true);
@@ -137,34 +138,37 @@ void Player::AttackEnemy(Enemy* enemy)
 {
 	if (enemy != nullptr && enemy->IsActive())
 	{
-		// 현재 적이 이미 처리된 적인지 확인
-		if (processedEnemies.find(enemy) != processedEnemies.end())
-		{
-			std::cout << "AttackEnemy: Already processed this enemy. Ignoring." << std::endl;
-			return;
-		}
+		//// 현재 적이 이미 처리된 적인지 확인
+		//if (processedEnemies.find(enemy) != processedEnemies.end())
+		//{
+		//	std::cout << "AttackEnemy: Already processed this enemy. Ignoring." << std::endl;
+		//	return;
+		//}
 
 		// 적에게 데미지 전달
-		enemy->OnDamage(attackDamage);
+		//enemy->OnDamage(attackDamage);
 
 		// 적을 잡을 수 있다면 체력 회복
 		if (CanCatchEnemy(enemy->GetType()))
 		{
+			enemy->OnDamage(attackDamage);
+	
 			int restoreAmount = enemy->GetHealthRestore();
 			IncreaseHealth(restoreAmount);  // 체력 회복
-			std::cout << "AttackEnemy: Restored health: " << restoreAmount << std::endl;
 
+			std::cout << "AttackEnemy: Restored health: " << restoreAmount << std::endl;
 			if (sceneGame)
 			{
 				sceneGame->OnEnemyDefeated(enemy->GetType());
 			}
+			enemy->SetActive(false);
 		}
 
 		// 적을 비활성화
-		enemy->SetActive(false);
+		//enemy->SetActive(false);
 
-		// 처리된 적을 집합에 추가
-		processedEnemies.insert(enemy);
+		//// 처리된 적을 집합에 추가
+		//processedEnemies.insert(enemy);
 
 		// 마지막으로 처리한 적 갱신
 		lastCollidedEnemy = enemy;
@@ -316,9 +320,11 @@ bool Player::CanCatchEnemy(Enemy::Types enemyType) const
 	{
 		if (allowedType == enemyType)
 		{
+
 			return true; // 플레이어가 잡을 수 있는 적의 타입이면 true
 		}
 	}
+
 	return false;
 }
 

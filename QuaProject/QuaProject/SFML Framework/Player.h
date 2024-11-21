@@ -42,7 +42,7 @@ protected:
 
 	//sf::Sprite body;
 public:
-	std::unordered_set<Enemy*> processedEnemies;  // 이미 처리된 적을 저장할 집합
+	//std::unordered_set<Enemy*> processedEnemies;  // 이미 처리된 적을 저장할 집합
 	Player(const std::string& name = "");
 	~Player() = default;
 

@@ -38,14 +38,17 @@ public:
 			obj->Init();
 			obj->Reset();
 			used.push_back(obj);
+			std::cout << "Take: »õ °´Ã¼ »ı¼º. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
 			return obj;
 		}
 
 		auto obj = unused.front();
 		unused.pop_front();
 		used.push_back(obj);
-		obj->SetActive(true);
 		obj->Reset();
+		obj->SetActive(true);
+		std::cout << "Take: unused¿¡¼­ °´Ã¼ °¡Á®¿È. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
+		//obj->Reset();
 		return obj;
 	}
 
@@ -59,6 +62,8 @@ public:
 		}
 		used.erase(find);
 		obj->SetActive(false);
+		obj->Reset();  //enemy reset
 		unused.push_back(obj);
+		std::cout << "Return: °´Ã¼ ¹İÈ¯µÊ. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
 	}
 };

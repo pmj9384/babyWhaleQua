@@ -77,35 +77,51 @@ void Enemy::Release()
 
 void Enemy::Reset()
 {
-	// scenegame이 nullptr인지 확인하고, nullptr이면 스폰하지 않음
-	if (scenegame == nullptr) 
+	// SceneGame 확인
+	if (scenegame == nullptr)
 	{
 		scenegame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
-		if (scenegame == nullptr)
+	}
+
+	// 랜덤 스폰 위치와 방향 설정
+	if (scenegame)
+	{
+		if (Utils::RandomRange(0, 1) == 0)
 		{
-			// 만약 scenegame이 nullptr이면 기본 위치 설정 후 반환
-			position = { 0.f, 0.f };
-			direction = sf::Vector2f(1.f, 0.f);
-			SetPosition(position);
-			return;
+			position = scenegame->spawn1.Spawn();
+			direction = sf::Vector2f(1.f, 0.f); // 오른쪽으로 이동
+		}
+		else
+		{
+			position = scenegame->spawn2.Spawn();
+			direction = sf::Vector2f(-1.f, 0.f); // 왼쪽으로 이동
 		}
 	}
-	if (Utils::RandomRange(0, 1) == 0)
+	else
 	{
-		position = scenegame->spawn1.Spawn(); 
-		direction = sf::Vector2f(1.f, 0.f); // 오른쪽으로 이동
+		position = { 0.f, 0.f };
+		direction = { 0.f, 0.f };
 	}
-	else 
-	{
-		position = scenegame->spawn2.Spawn(); 
-		direction = sf::Vector2f(-1.f, 0.f); // 왼쪽으로 이동
-	}
+
+	// 초기 상태 설정
 	SetPosition(position);
+	this->direction = direction;
 
-	this->direction = direction; //방향 전환
-	directionChangeTimer = 0.f;
+	hp = maxHp;                // 체력 초기화
+	isActive = false;          // 비활성화 상태
+	canAttack = true;          // 공격 가능 상태 초기화
+	deactivateTimer = 0.f;     // 비활성화 타이머 초기화
+	directionChangeTimer = 0.f; // 방향 변경 타이머 초기화
 
+	if (movementPattern)
+	{
+		delete movementPattern; // 이동 패턴 초기화 (필요 시)
+		movementPattern = nullptr;
+	}
+
+	std::cout << "Enemy 리셋 완료. 초기 상태로 설정되었습니다." << std::endl;
 }
+
 
 void Enemy::Update(float dt)
 {
@@ -174,6 +190,8 @@ void Enemy::Update(float dt)
 
 void Enemy::Draw(sf::RenderWindow& window)
 {
+	if (!active) // 활성화된 경우에만 그리기
+		return;
 	window.draw(body);
 }
 
@@ -248,40 +266,45 @@ void Enemy::SetSceneGame(SceneGame* game)
 
 void Enemy::OnDamage(int damage)
 {
-	if (!active) // 이미 비활성화된 경우 함수 종료
-		return;
 	hp -= damage;
-
+	std::cout << "OnDamage: Enemy " << this << " 체력 감소, 남은 체력: " << hp << std::endl;
 	if (hp <= 0)
 	{
-		hp = 0;
-		//SetActive(false); // 적 비활성화
-	/*	if (scenegame)
-		{
-			scenegame->OnEnemyDefeated(types);
-		}	*/
+		//hp = 0;
+		std::cout << "OnDamage: Enemy " << this << " 체력 0, SetActive(false) 호출" << std::endl;
+
 	}
 }
 
 void Enemy::SetActive(bool isActive)
 {
+	//if (this->active == isActive) // 상태가 동일하면 무시
+	//	return;
+
+	//this->active = isActive;
+	
 	if (isActive)
 	{
-		// 활성화 로직
-		active = true;
-		// 추가 로직...
+		std::cout << "Enemy 활성화됨. Obj 주소 = " << this << std::endl;
 	}
 	else
 	{
-		// 비활성화 로직
-		active = false;
+		std::cout << "Enemy 비활성화됨. Obj 주소 = " << this << std::endl;
+
 		if (scenegame)
 		{
-			//scenegame->OnEnemyDefeated(types);
-			scenegame->RemoveGo(this); // 적을 즉시 제거
-			scenegame->GetEnemyPool().Return(this); // enemyPool에 반환
+			std::cout << "SetActive: RemoveGo 호출 시작" << std::endl;
+			scenegame->RemoveGo(this);
+			std::cout << "SetActive: RemoveGo 호출 완료" << std::endl;
+
+			std::cout << "SetActive: Return 호출 시작" << std::endl;
+			scenegame->GetEnemyPool().Return(this);
+			std::cout << "SetActive: Return 호출 완료" << std::endl;
 		}
-		// 추가 로직...
+		else
+		{
+			std::cout << "SetActive: scenegame이 nullptr입니다!" << std::endl;
+		}
 	}
 }
 

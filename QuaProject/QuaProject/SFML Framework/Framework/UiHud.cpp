@@ -39,6 +39,7 @@ void UiHud::Init()
 {
 	sortingLayer = SortingLayers::UI;
 	sortingOrder = 0;
+
 }
 
 void UiHud::Release()
@@ -111,7 +112,7 @@ void UiHud::Reset()
 
 	MainWindow.setPosition(500.f, 500.f);
 	MainWindow.setScale({ 0.5f,0.7f });
-
+	
 
 
 	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };

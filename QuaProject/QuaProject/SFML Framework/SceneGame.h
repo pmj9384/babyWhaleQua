@@ -88,5 +88,8 @@ public:
 	void ProcessEvents();
 
 	void OnWaveComplete();
+
+	void RemoveEnemy(Enemy* enemy);
+
 };
 
