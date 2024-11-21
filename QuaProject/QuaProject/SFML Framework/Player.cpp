@@ -82,7 +82,7 @@ void Player::Reset()
 
 	maxHealth = 100;
 	runSpeed = 1.0f;
-
+	SetActive(true);
 }
 
 void Player::Update(float dt)
@@ -137,15 +137,17 @@ void Player::AttackEnemy(Enemy* enemy)
 {
 	if (enemy != nullptr && enemy->IsActive())
 	{
-		// 이미 처리한 적이라면 무시
+		// 현재 적이 이미 처리된 적인지 확인
 		if (processedEnemies.find(enemy) != processedEnemies.end())
 		{
 			std::cout << "AttackEnemy: Already processed this enemy. Ignoring." << std::endl;
 			return;
 		}
 
-		enemy->OnDamage(attackDamage);  // 적에게 데미지 전달
+		// 적에게 데미지 전달
+		enemy->OnDamage(attackDamage);
 
+		// 적을 잡을 수 있다면 체력 회복
 		if (CanCatchEnemy(enemy->GetType()))
 		{
 			int restoreAmount = enemy->GetHealthRestore();

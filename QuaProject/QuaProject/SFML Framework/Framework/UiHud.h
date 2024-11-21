@@ -2,6 +2,9 @@
 
 class UiHud : public GameObject
 {
+public:
+
+
 protected:
 
 	sf::Text textScore;
@@ -17,9 +20,11 @@ protected:
 	
 	sf::Vector2f gaugeHpMaxSize = { 400.f, 50.f };
 	int currentScore = 0;
-	bool isGameOverVisible = false;
+
 	
 	HitBox buttonHitBox;           // 메인 화면 버튼
+	HitBox buttonHitBox2;
+	HitBox buttonHitBox3;
 	//bool isGameOverVisible;
 	float windowWidth = 1920.f;
 	float windowHeight = 1080.f;
@@ -28,7 +33,9 @@ protected:
 	float buttonHeight = 50.f;
 
 public:
+
 	bool isMainWindowVisible = true;
+	bool isGameOverVisible = true;
 	UiHud(const std::string& name = "");
 	~UiHud() = default;
 
@@ -57,4 +64,5 @@ public:
 	void SetMainWindow(int m);
 	bool IsButtonClicked(const sf::Vector2f& mousePos);
 	void HandleEvent(const sf::Event& event);
+
 };

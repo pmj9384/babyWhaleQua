@@ -108,11 +108,25 @@ void SceneGame::Enter()
 	Scene::Enter();
 }
 
+void SceneGame::Reset()
+{
+	std::cout << "SceneGame::Reset 호출됨" << std::endl;
+
+	wave->Reset();
+	player->Reset();
+	uiHud->Reset();
+	enemy->Reset();
+	uiHealthbar->Reset();
+
+	std::cout << "SceneGame::Reset 완료" << std::endl;
+}
+
 void SceneGame::Exit()
 {
 	TEXTURE_MGR.Unload("graphics/images/Background.png");
 	for (auto enemy : enemys)
 	{
+
 		RemoveGo(enemy);
 		enemyPool.Return(enemy);
 	}
@@ -128,11 +142,36 @@ void SceneGame::Update(float dt)
 
 	sf::Event event;
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		if (uiHud->IsButtonClicked(worldMousePos)) 
+		if (uiHud->IsButtonClicked(worldMousePos))
 		{
-			uiHud->isMainWindowVisible = false;  // 버튼 클릭 시 MainWindow 비활성화
+			if (!uiHud->isMainWindowVisible)
+			{
+				std::cout << "MainWindow 처리 완료." << std::endl;
+			}
+			if (!uiHud->isGameOverVisible)
+			{
+				if (wave)
+					wave->Reset();
+				if (player)
+					player->Reset();
+				if (uiHud)
+					uiHud->Reset();
+				if (enemy)
+					enemy->Reset();
+				if (uiHealthbar)
+					uiHealthbar->Reset();
+				for (auto& enemy : enemys)
+				{
+					enemy->SetActive(false); // 적 비활성화
+				}
+				enemys.clear(); // 컨테이너 비우기
+
+				spawnTimer = 0.f;
+				SetPlayerLevel(1);
+				currentWave->SetType(Wave::Types::Wave1);
+			}
 		}
 	}
 	if (isPaused)
@@ -165,24 +204,27 @@ void SceneGame::Update(float dt)
 		itemSpawnTimer -= itemSpawnInterval; // 타이머 초기화
 		SpawnItem(1); // 아이템 스폰
 	}
+
+	spawnTimer += dt;
+	if (spawnTimer >= spawnInterval)  // 일정 시간마다 적 스폰
+	{
+		spawnTimer -= spawnInterval; // 타이머 초기화
+		SpawnEnemy(1);
+	}
+
 	if (currentWave)
 	{
 		currentWave->Update(dt); // 웨이브 상태 갱신
 
 		// 적 스폰 처리
-		if (currentWave->CanSpawnEnemy())
-		{
-			SpawnEnemy(1); // 적 스폰
-			currentWave->IncrementSpawnedEnemies();
-		}
+		//if (currentWave->CanSpawnEnemy())
+		//{
+		//	SpawnEnemy(1); // 적 스폰
+		//	currentWave->IncrementSpawnedEnemies();
+		//}
 
 		if (currentWave->IsWaveComplete())
 		{
-		
-			// 기존 웨이브 삭제
-			delete currentWave;
-			currentWave = nullptr;
-
 			// 새로운 웨이브 생성
 			currentWave = new Wave();
 
@@ -502,6 +544,40 @@ void SceneGame::OnEnemyDefeated(Enemy::Types enemyType)
 
 }
 
+void SceneGame::OnWaveComplete()
+{
+	// 웨이브가 끝날 때마다 처리된 적들을 리셋
+	player->processedEnemies.clear();  // `Player`에서 `processedEnemies`를 초기화
+
+	//// 웨이브가 끝날 때 적들을 비활성화
+	//for (auto& enemy : enemys)
+	//{
+	//	enemy->SetActive(false);  // 모든 적을 비활성화
+	//}
+
+	// 새로운 웨이브 생성
+	if (currentWave)
+	{
+		delete currentWave;
+		currentWave = nullptr;
+	}
+
+	// 새로운 웨이브 객체 생성 및 시작
+	currentWave = new Wave();
+	currentWave->StartWave();
+
+	// 플레이어 레벨 증가
+	playerLevel++;
+	SetPlayerLevel(playerLevel);  // 플레이어 레벨에 맞는 적 허용 타입 설정
+
+	std::cout << "Started Wave " << playerLevel << std::endl;
+
+	// 새로운 웨이브의 적을 다시 활성화
+	for (auto& enemy : enemys)
+	{
+		enemy->SetActive(true);  // 새 웨이브에서 적을 다시 활성화
+	}
+}
 
 
 

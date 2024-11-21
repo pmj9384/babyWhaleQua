@@ -9,7 +9,7 @@
 
 class Player;
 class Enemy;
-class wave;
+class Wave;
 class UiHealthBar;
 class UiHud;
 
@@ -20,6 +20,7 @@ protected:
 	sf::Sprite missionUi;
 	Player* player;
 	UiHealthBar* uiHealthbar;
+	Wave* wave;
 	Enemy* enemy;
 	int playerLevel = 1;
 
@@ -34,8 +35,12 @@ protected:
 	Wave* currentWave;
 	float itemSpawnTimer = 0.0f;
 	float itemSpawnInterval = 20.0f;
+
+	float spawnTimer = 0.0f;
+	float spawnInterval = 0.5f;
 	bool isPaused = false;
 	int currentScore = 0;
+	std::unordered_set<Enemy*> processedEnemies;
 public:
 	SpawnArea spawn1;
 	SpawnArea spawn2;
@@ -47,6 +52,7 @@ public:
 	void Init();
 	void Release();
 	void Enter();
+	void Reset();
 	void Exit();
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window) override;  // spawndraw
@@ -80,5 +86,7 @@ public:
 	void OnEnemyDefeated(Enemy::Types enemyType);
 
 	void ProcessEvents();
+
+	void OnWaveComplete();
 };
 

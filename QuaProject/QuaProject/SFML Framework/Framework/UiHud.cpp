@@ -54,33 +54,33 @@ void UiHud::Reset()
 	textScore.setCharacterSize(textSize);
 	textScore.setFillColor(sf::Color::White);
 	Utils::SetOrigin(textScore, Origins::TL);
-
-	textHighScore.setFont(font);
-	textHighScore.setCharacterSize(textSize);
-	textHighScore.setFillColor(sf::Color::White);
-	Utils::SetOrigin(textHighScore, Origins::TR);
-
-	textAmmo.setFont(font);
-	textAmmo.setCharacterSize(textSize);
-	textAmmo.setFillColor(sf::Color::White);
-	Utils::SetOrigin(textAmmo, Origins::BL);
-
-	textWave.setFont(font);
-	textWave.setCharacterSize(textSize);
-	textWave.setFillColor(sf::Color::White);
-	Utils::SetOrigin(textWave, Origins::BR);
-
-	textZombieCount.setFont(font);
-	textZombieCount.setCharacterSize(textSize);
-	textZombieCount.setFillColor(sf::Color::White);
-	Utils::SetOrigin(textZombieCount, Origins::BR);
-
-	gaugeHp.setFillColor(sf::Color::Red);
-	gaugeHp.setSize(gaugeHpMaxSize);
-	Utils::SetOrigin(gaugeHp, Origins::BL);
-
-	iconAmmoIcon.setTexture(TEXTURE_MGR.Get("graphics/ammo_icon.png"));
-	Utils::SetOrigin(iconAmmoIcon, Origins::BL);
+	//
+	//textHighScore.setFont(font);
+	//textHighScore.setCharacterSize(textSize);
+	//textHighScore.setFillColor(sf::Color::White);
+	//Utils::SetOrigin(textHighScore, Origins::TR);
+	//
+	//textAmmo.setFont(font);
+	//textAmmo.setCharacterSize(textSize);
+	//textAmmo.setFillColor(sf::Color::White);
+	//Utils::SetOrigin(textAmmo, Origins::BL);
+	//
+	//textWave.setFont(font);
+	//textWave.setCharacterSize(textSize);
+	//textWave.setFillColor(sf::Color::White);
+	//Utils::SetOrigin(textWave, Origins::BR);
+	//
+	//textZombieCount.setFont(font);
+	//textZombieCount.setCharacterSize(textSize);
+	//textZombieCount.setFillColor(sf::Color::White);
+	//Utils::SetOrigin(textZombieCount, Origins::BR);
+	//
+	//gaugeHp.setFillColor(sf::Color::Red);
+	//gaugeHp.setSize(gaugeHpMaxSize);
+	//Utils::SetOrigin(gaugeHp, Origins::BL);
+	//
+	//iconAmmoIcon.setTexture(TEXTURE_MGR.Get("graphics/ammo_icon.png"));
+	//Utils::SetOrigin(iconAmmoIcon, Origins::BL);
 
 	iconGameOver.setTexture(TEXTURE_MGR.Get("graphics/sprites/GameOver_214/1.png"));
 	Utils::SetOrigin(iconGameOver, Origins::MC);
@@ -94,10 +94,12 @@ void UiHud::Reset()
 	float BottomY = size.y - 25.f;
 
 	textScore.setPosition(820.f, topY );
-	textHighScore.setPosition(size.x - 80.f, topY );
+	//textHighScore.setPosition(size.x - 80.f, topY );
 
-	iconAmmoIcon.setPosition(25.f, BottomY);
+//	iconAmmoIcon.setPosition(25.f, BottomY);
+
 	iconGameOver.setPosition(500.f, 500.f);
+	iconGameOver.setScale({ 1.5f,1.5f });
 
 
 	MainWindow.setPosition(500.f, 500.f);
@@ -108,20 +110,29 @@ void UiHud::Reset()
 	buttonHitBox.SetVisible(true);
 
 
-	gaugeHp.setPosition(300.f, BottomY);
+	sf::FloatRect buttonArea2 = { 30.f, 85.f, 80.f, 40.f };
+	buttonHitBox2.UpdateTr(iconGameOver, buttonArea2);
+	buttonHitBox2.SetVisible(true);
 
-	textAmmo.setPosition(100.f, BottomY);
+	sf::FloatRect buttonArea3 = { 200.f, 85.f, 80.f, 40.f };
+	buttonHitBox3.UpdateTr(iconGameOver, buttonArea3);
+	buttonHitBox3.SetVisible(true);
 
-	textWave.setPosition(size.x - 400.f, BottomY);
-	textZombieCount.setPosition(size.x - 25.f, BottomY);
+
+//	gaugeHp.setPosition(300.f, BottomY);
+
+//	textAmmo.setPosition(100.f, BottomY);
+
+//	textWave.setPosition(size.x - 400.f, BottomY);
+//	textZombieCount.setPosition(size.x - 25.f, BottomY);
 
 	isGameOverVisible = false;
 	SetScore(0);
-	SetHiScore(0);
-	SetAmmo(0, 0);
-	SetHp(1.f, 1.f);
-	SetWave(0);
-	SetZombieCount(0);
+//	SetHiScore(0);
+//	SetAmmo(0, 0);
+//	SetHp(1.f, 1.f);
+//	SetWave(0);
+//	SetZombieCount(0);
 }
 
 void UiHud::Update(float dt)
@@ -140,6 +151,9 @@ void UiHud::Draw(sf::RenderWindow& window)
 	if (isGameOverVisible)
 	{
 		window.draw(iconGameOver);
+		buttonHitBox2.Draw(window);
+		buttonHitBox3.Draw(window);
+
 	}
 	if (isMainWindowVisible) // MainWindow의 가시성 확인
 	{
@@ -191,7 +205,29 @@ void UiHud::SetMainWindow(int m)
 
 bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 {
-	return buttonHitBox.IsMouseOver(mousePos);
+	// MainWindow 버튼 클릭 처리
+	if (buttonHitBox.IsMouseOver(mousePos))
+	{
+		isMainWindowVisible = false;  // MainWindow 비활성화
+		std::cout << "MainWindow 버튼 클릭됨." << std::endl;
+		return true;
+	}
+
+	// GameOver 버튼 클릭 처리
+	if (buttonHitBox2.IsMouseOver(mousePos))
+	{
+		isGameOverVisible = false;  // GameOver UI 비활성화
+		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+		return true;
+	}
+	if (buttonHitBox3.IsMouseOver(mousePos))
+	{
+		isGameOverVisible = false;  // GameOver UI 비활성화
+		isMainWindowVisible = true;
+		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+		return true;
+	}
+	return false;
 }
 
 void UiHud::HandleEvent(const sf::Event& event)
