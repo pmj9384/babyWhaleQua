@@ -51,7 +51,7 @@ protected:
 
 	size_t currentFrame = 0;
 	float recoveryTimer = 0.f;           // "Eat" 상태에서 원래 상태로 돌아가기 위한 타이머
-	const float eatAnimationDuration = 1.0f;
+	const float eatAnimationDuration = 0.25f;
 
 	float hitRecoveryTimer = 0.f;               // "Hit" 상태에서 원래 상태로 복귀하기 위한 타이머
 	const float hitAnimationDuration = 0.8f;
