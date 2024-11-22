@@ -102,6 +102,32 @@ void Player::Update(float dt)
 		SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
 	}
 
+	if (isDead)
+	{
+		// 플레이어가 죽은 경우 바닥으로 천천히 이동
+		deathTimer -= dt;
+		if (deathTimer > 0)
+		{
+			position.y += deathSpeed * dt; // 죽는 속도로 아래로 이동
+		}
+		else
+		{
+			// 죽음 상태가 끝난 후 추가 처리 (필요하다면)
+			isDead = false; // 더 이상 업데이트하지 않음
+		}
+
+		SetPosition(position);
+		return; // 죽음 상태에서는 다른 업데이트를 중단
+	}
+	if (hitRecoveryTimer > 0.f)
+	{
+		hitRecoveryTimer -= dt;
+		if (hitRecoveryTimer <= 0.f)
+		{
+			hitRecoveryTimer = 0.f; // Hit 상태 종료
+		}
+	}
+
 	// 애니메이션 상태 처리
 	if (recoveryTimer > 0.f) 
 	{
@@ -111,7 +137,17 @@ void Player::Update(float dt)
 			recoveryTimer = 0.f; // Eat 상태 종료
 		}
 	}
-	if (recoveryTimer <= 0.f) {
+
+	if (hitRecoveryTimer > 0.f)
+	{
+		PlayState("Hit"); // "Hit" 상태 유지
+	}
+	else if (recoveryTimer > 0.f)
+	{
+		PlayState("Eat"); // "Eat" 상태 유지
+	}
+	else
+	{
 		if (direction.x != 0.f || direction.y != 0.f)
 		{
 			PlayState("Run"); // 이동 중이면 "Run"
@@ -231,8 +267,15 @@ void Player::FixedUpdate(float dt)
 			}
 			else
 			{
+			
+				if (!isInvincible)
+				{
+					PlayState("Hit");
+					hitRecoveryTimer = hitAnimationDuration;
+				}
 				OnDamage(enemy->GetDamage()); // 플레이어가 적에게 데미지를 받음
 				enemy->Deactivate(0.2f);
+
 			}
 
 			// 마지막 충돌한 적 갱신
@@ -279,6 +322,7 @@ void Player::FixedUpdate(float dt)
 
 void Player::OnDamage(int damageAmount)
 {
+
 	if (isInvincible) 
 	{
 		std::cout << "Player is invincible. No damage taken." << std::endl;
@@ -291,7 +335,10 @@ void Player::OnDamage(int damageAmount)
 	if (hp <= 0)
 	{
 		hp = 0;
-		sceneGame->OnPlayerDie(this);
+		isDead = true;
+		deathTimer = deathDuration;
+		PlayState("Die");
+			sceneGame->OnPlayerDie(this);
 	}
 	UpdateHealthBar();
 }

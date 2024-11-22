@@ -382,8 +382,8 @@ void SceneGame::SpawnEnemy(int count)
 
 void SceneGame::OnPlayerDie(Player* player)
 {
-	player->SetActive(false);
-	isPaused = true;
+	//player->SetActive(false);
+	//isPaused = true;
 	if (uiHud)
 	{
 		uiHud->ShowGameOver(true); // 게임 오버 아이콘 표시
