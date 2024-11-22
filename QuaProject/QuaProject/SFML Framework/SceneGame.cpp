@@ -45,7 +45,7 @@ void SceneGame::Init()
 	levelNum->sortingLayer = SortingLayers::UI;
 	levelNum->sortingOrder = -1;
 	levelNum->SetPosition({ 105.0f, windowSize.y-215.f });
-	levelNum->SetScale({ 2.f,3.f });
+	levelNum->SetScale({ 0.7f,0.7f });
 	if (TEXTURE_MGR.Load("graphics/images/36.png"))
 	{
 		levelNum->SetTexture(TEXTURE_MGR.Get("graphics/images/36.png"));
@@ -54,8 +54,8 @@ void SceneGame::Init()
 	GameObject* missionUi = AddGo(new SpriteGo("graphics/sprites/UiEnermybar_89/mission1.png","MissionUi"));
 	missionUi->sortingLayer = SortingLayers::UI;
 	missionUi->sortingOrder = -1;
-	missionUi->SetPosition({ 270.0f, windowSize.y - 250.f });
-	missionUi->SetScale({ 0.8f,1.0f });
+	missionUi->SetPosition({ 240.0f, windowSize.y - 250.f });
+	missionUi->SetScale({ 0.5f,0.5f });
 
 	//if (TEXTURE_MGR.Load("graphics/sprites/UiEnermybar_89/mission1.png"))
 	//{
@@ -408,68 +408,68 @@ void SceneGame::SetPlayerLevel(int level)
 	case 1:
 		allowedTypes = { Enemy::Types::smallFish }; // 레벨 1에서는 smallFish만 잡을 수 있음
 	//	textureId = "graphics/images/91.png";
-		levelImageId = "graphics/images/36.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
+		levelImageId = "graphics/images/score/1.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/1.png";
 		break;
 	case 2:
 		allowedTypes = { Enemy::Types::smallFish };
 	//	textureId = "graphics/images/105.png";
-		levelImageId = "graphics/images/38.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
+		levelImageId = "graphics/images/score/2.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/1.png";
 		break;
 	case 3:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
 	//	textureId = "graphics/images/116.png";
 		levelImageId = "graphics/images/40.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/2.png";
 		break;
 	case 4:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
 	//	textureId = "graphics/images/127.png";
 		levelImageId = "graphics/images/42.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/2.png";
 
 		break;
 	case 5:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
 	//	textureId = "graphics/images/138.png";
 		levelImageId = "graphics/images/44.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/3.png";
 
 		break;
 	case 6:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
 	//	textureId = "graphics/images/149.png";
 		levelImageId = "graphics/images/46.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/3.png";
 
 		break;
 	case 7:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
 	//	textureId = "graphics/images/160.png";
 		levelImageId = "graphics/images/48.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/3.png";
 
 		break;
 	case 8:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
 	//	textureId = "graphics/images/171.png";
 		levelImageId = "graphics/images/50.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/4.png";
 
 		break;
 	case 9:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
 	//	textureId = "graphics/images/182.png";
 		levelImageId = "graphics/images/52.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/4.png";
 
 		break;
 	case 10:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
 	//	textureId = "graphics/images/193.png";
 		levelImageId = "graphics/images/54.png";
-		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
+		missionTextureId = "graphics/sprites/UiEnermybar_89/4.png";
 		break;
 	default:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
