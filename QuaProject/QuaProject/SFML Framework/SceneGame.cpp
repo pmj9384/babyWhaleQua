@@ -87,7 +87,7 @@ void SceneGame::Init()
 	uiHealthbar->SetPlayer(player);
 
 
-	isPaused = true;
+	isPaused = false;
 
 	Scene::Init();
 }
@@ -213,16 +213,7 @@ void SceneGame::Update(float dt)
 	}
 	if (isPaused)
 	{
-		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
-		{
-			isPaused = false;
-		}
-		return;
-	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
-	{
-		isPaused = true;
-		return;
+		return; // 게임이 일시 정지 상태일 경우 업데이트 중단
 	}
 	if (uiHealthbar)
 	{
@@ -268,12 +259,10 @@ void SceneGame::Update(float dt)
 			{
 				currentWave->SetType(nextWaveType);
 				currentWave->StartWave();
-
-				std::cout << "Started Wave " << static_cast<int>(nextWaveType) << std::endl;
 			}
 			else
 			{
-				std::cout << "No more waves! Game complete!" << std::endl;
+
 				//currentWave = nullptr; // 게임 종료 상태로 전환
 				isPaused =true;
 				uiHud->isGameClearVisible = true;
@@ -492,7 +481,6 @@ void SceneGame::SetPlayerLevel(int level)
 	if (player) 
 	{
 		player->SetLevel(level);
-		std::cout << "[DEBUG] Player level set to " << level << std::endl;
 	}
 	GameObject* levelNum = FindGo("LevelNumber");
 	if (levelNum)
@@ -602,7 +590,6 @@ void SceneGame::OnWaveComplete()
 	playerLevel++;
 	SetPlayerLevel(playerLevel);  // 플레이어 레벨에 맞는 적 허용 타입 설정
 
-	std::cout << "Started Wave " << playerLevel << std::endl;
 
 	// 새로운 웨이브의 적을 다시 활성화
 	//for (auto& enemy : enemys)

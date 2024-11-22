@@ -15,6 +15,7 @@ protected:
 	sf::Sprite iconGameOver;
 	sf::Sprite iconGameClear;
 	sf::Sprite MainWindow;
+	sf::Sprite bubble;
 
 	sf::Text textAmmo;
 	sf::RectangleShape gaugeHp;

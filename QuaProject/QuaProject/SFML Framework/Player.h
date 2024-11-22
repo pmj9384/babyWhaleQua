@@ -43,9 +43,6 @@ protected:
 	std::unordered_map<std::string, std::vector<std::string>> stateTextures;
 	std::string currentState;
 
-
-
-
 	float animationTimer = 0.f;
 	float animationInterval = 0.2f; // 애니메이션 프레임 간격
 
@@ -54,7 +51,7 @@ protected:
 	const float eatAnimationDuration = 0.25f;
 
 	float hitRecoveryTimer = 0.f;               // "Hit" 상태에서 원래 상태로 복귀하기 위한 타이머
-	const float hitAnimationDuration = 0.8f;
+	const float hitAnimationDuration = 0.25f;
 
 	bool isDead = false;                // 사망 여부
 	float deathTimer = 0.f;             // 사망 후 타이머

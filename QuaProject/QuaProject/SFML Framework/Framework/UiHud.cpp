@@ -87,7 +87,7 @@ void UiHud::Reset()
 	Utils::SetOrigin(iconGameOver, Origins::MC);
 
 	iconGameClear.setTexture(TEXTURE_MGR.Get("graphics/sprites/AllClear_221/10.png"));
-	Utils::SetOrigin(iconGameOver, Origins::MC);
+	//Utils::SetOrigin(iconGameClear, Origins::MC);
 
 
 	MainWindow.setTexture(TEXTURE_MGR.Get("graphics/frames/main.png"));
@@ -232,7 +232,7 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	if (buttonHitBox.IsMouseOver(mousePos))
 	{
 		isMainWindowVisible = false;  // MainWindow 비활성화
-		std::cout << "MainWindow 버튼 클릭됨." << std::endl;
+
 		return true;
 	}
 
@@ -240,21 +240,21 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	if (buttonHitBox2.IsMouseOver(mousePos))
 	{
 		isGameOverVisible = false;  // GameOver UI 비활성화
-		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+
 		return true;
 	}
 	if (buttonHitBox3.IsMouseOver(mousePos))
 	{
 		isGameOverVisible = false;  // GameOver UI 비활성화
 		isMainWindowVisible = true;
-		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+
 		return true;
 	}
 	if (buttonHitBox4.IsMouseOver(mousePos))
 	{
 		isGameClearVisible = false;  // GameOver UI 비활성화
 		isMainWindowVisible = true;
-		std::cout << "GameOver 버튼 클릭됨. 게임 리셋." << std::endl;
+
 		return true;
 	}
 	return false;

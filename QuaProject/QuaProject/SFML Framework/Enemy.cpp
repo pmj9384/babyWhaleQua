@@ -118,8 +118,6 @@ void Enemy::Reset()
 		delete movementPattern; // 이동 패턴 초기화 (필요 시)
 		movementPattern = nullptr;
 	}
-
-	std::cout << "Enemy 리셋 완료. 초기 상태로 설정되었습니다." << std::endl;
 }
 
 
@@ -177,6 +175,17 @@ void Enemy::Update(float dt)
 	}
 
 	position += direction * speed * dt;
+	sf::Vector2f position = GetPosition();
+
+	// 하단 경계값 설정 (예: 바닥 위치 Y값)
+	float bottomBoundary = 870.f; // 바닥의 Y 좌표 (해당 값은 실제 게임 창 크기나 설정에 맞게 조정)
+	float boundaryOffset = 50.f;  // 적이 바닥에 닿기 전에 멈추는 여유값
+
+	// 바닥 경계 체크
+	if (position.y > bottomBoundary - boundaryOffset)
+	{
+		position.y = bottomBoundary - boundaryOffset; // 바닥에 닿으면 멈춤
+	}
 	SetPosition(position);
 
 	if (movementPattern)
@@ -254,7 +263,6 @@ void Enemy::SetType(Types type)
 		AddMovementPattern(new ChaseMovement());
 		break;
 	default:
-		std::cout << "Unknown type, no movement pattern added." << std::endl;
 		break;
 	}
 }
@@ -267,12 +275,9 @@ void Enemy::SetSceneGame(SceneGame* game)
 void Enemy::OnDamage(int damage)
 {
 	hp -= damage;
-	std::cout << "OnDamage: Enemy " << this << " 체력 감소, 남은 체력: " << hp << std::endl;
 	if (hp <= 0)
 	{
 		//hp = 0;
-		std::cout << "OnDamage: Enemy " << this << " 체력 0, SetActive(false) 호출" << std::endl;
-
 	}
 }
 
@@ -285,25 +290,16 @@ void Enemy::SetActive(bool isActive)
 	
 	if (isActive)
 	{
-		std::cout << "Enemy 활성화됨. Obj 주소 = " << this << std::endl;
 	}
 	else
 	{
-		std::cout << "Enemy 비활성화됨. Obj 주소 = " << this << std::endl;
-
 		if (scenegame)
 		{
-			std::cout << "SetActive: RemoveGo 호출 시작" << std::endl;
 			scenegame->RemoveGo(this);
-			std::cout << "SetActive: RemoveGo 호출 완료" << std::endl;
-
-			std::cout << "SetActive: Return 호출 시작" << std::endl;
 			scenegame->GetEnemyPool().Return(this);
-			std::cout << "SetActive: Return 호출 완료" << std::endl;
 		}
 		else
 		{
-			std::cout << "SetActive: scenegame이 nullptr입니다!" << std::endl;
 		}
 	}
 }

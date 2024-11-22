@@ -135,12 +135,9 @@ bool Wave::IsWaveComplete() const
 
         if (enemiesKilled.at(type) < requiredCount)
         {
-            std::cout << "Wave not complete. Type: " << static_cast<int>(type)
-                << ", Killed: " << enemiesKilled.at(type)
-                << ", Required: " << requiredCount << std::endl;
             return false;
         }
-        std::cout << "Wave complete!\n";
+
     }
     return true;
 }
@@ -167,7 +164,6 @@ void Wave::AddTargetToKill(Enemy::Types type, int count)
     }
     else
     {
-        std::cout << "Enemy type already exists in targetsToKill." << std::endl;
     }
     
 }
@@ -182,7 +178,6 @@ void Wave::EnemyKilled(Enemy::Types type)
     }
     else
     {
-        std::cout << "Invalid enemy type killed: " << static_cast<int>(type) << std::endl;
     }
 }
 

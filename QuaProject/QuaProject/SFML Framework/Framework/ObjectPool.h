@@ -38,7 +38,6 @@ public:
 			obj->Init();
 			obj->Reset();
 			used.push_back(obj);
-			std::cout << "Take: »õ °´Ã¼ »ı¼º. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
 			return obj;
 		}
 
@@ -47,7 +46,7 @@ public:
 		used.push_back(obj);
 		obj->Reset();
 		obj->SetActive(true);
-		std::cout << "Take: unused¿¡¼­ °´Ã¼ °¡Á®¿È. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
+		
 		//obj->Reset();
 		return obj;
 	}
@@ -57,13 +56,12 @@ public:
 		auto find = std::find(used.begin(), used.end(), obj);
 		if (find == used.end())
 		{
-			std::cout << "Invaild Obj" << std::endl;
 			return;
 		}
 		used.erase(find);
 		obj->SetActive(false);
 		obj->Reset();  //enemy reset
 		unused.push_back(obj);
-		std::cout << "Return: °´Ã¼ ¹İÈ¯µÊ. used size = " << used.size() << ", unused size = " << unused.size() << std::endl;
+
 	}
 };

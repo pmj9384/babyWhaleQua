@@ -78,7 +78,7 @@ void Player::Reset()
 	direction = { 1.f, 0.f };
 	hp = maxHp; // 체력을 최대치로 리셋
 	UpdateHealthBar();
-
+	isDead = false;
 	//processedEnemies.clear(); // new
 	//lastCollidedEnemy = nullptr; // new
 	maxHealth = 100;
@@ -164,7 +164,6 @@ void Player::Update(float dt)
 			isInvincible = false;
 			invincibleTimer = 0.0f;
 			body.setColor(sf::Color(255, 255, 255, 255));
-			std::cout << "Player is no longer invincible." << std::endl;
 		}
 	}
 
@@ -172,8 +171,7 @@ void Player::Update(float dt)
 	if (healthDecreaseTimer >= decreaseInterval)
 	{
 		healthDecreaseTimer -= decreaseInterval; // 타이머 초기화
-		OnDamage(1); // 체력 1 감소
-		std::cout << "Health decreased by 1. Current HP: " << hp << std::endl;
+		OnDamage(5); // 체력 1 감소
 	}
 
 	SetPosition(position + direction * speed * dt);
@@ -202,7 +200,6 @@ void Player::AttackEnemy(Enemy* enemy)
 			int restoreAmount = enemy->GetHealthRestore();
 			IncreaseHealth(restoreAmount);  // 체력 회복
 
-			std::cout << "AttackEnemy: Restored health: " << restoreAmount << std::endl;
 			if (sceneGame)
 			{
 				sceneGame->OnEnemyDefeated(enemy->GetType());
@@ -256,7 +253,7 @@ void Player::FixedUpdate(float dt)
 			// 이미 처리된 적이면 무시
 			if (enemy == lastCollidedEnemy)
 			{
-				std::cout << "Already processed this enemy. Ignoring." << std::endl;
+
 				continue;
 			}
 
@@ -292,7 +289,7 @@ void Player::FixedUpdate(float dt)
 			{
 				// 충돌 범위를 벗어나면 초기화
 				lastCollidedEnemy = nullptr;
-				std::cout << "Resetting lastCollidedEnemy after collision ended." << std::endl;
+
 			}
 		}
 	}
@@ -325,12 +322,10 @@ void Player::OnDamage(int damageAmount)
 
 	if (isInvincible) 
 	{
-		std::cout << "Player is invincible. No damage taken." << std::endl;
+
 		return;
 	}
 
-
-	std::cout << "Damage taken: " << damageAmount << std::endl;
 	hp -= damageAmount;
 	if (hp <= 0)
 	{
@@ -359,7 +354,7 @@ void Player::OnPickup(Item* item)
 	invincibleTimer = invincibleDuration;
 
 	body.setColor(sf::Color(255, 255, 255, 128));
-	std::cout << "Player is now invincible for " << invincibleDuration << " seconds." << std::endl;
+
 }
 
 void Player::SetAllowedEnemyTypes(const std::vector<Enemy::Types>& types)
@@ -386,19 +381,19 @@ void Player::ConsumeEnemy(Enemy* enemy)
 	if (enemy != nullptr && enemy->IsActive())
 	{
 		// 적에게 데미지를 전달
-		std::cout << "ConsumeEnemy: Attacking enemy." << std::endl;
+
 		AttackEnemy(enemy);
 
 		// 적이 비활성화되었으면 체력 회복
 		if (!enemy->IsActive())
 		{
 			int restoreAmount = enemy->GetHealthRestore();
-			std::cout << "ConsumeEnemy: Enemy is inactive. Restoring health: " << restoreAmount << std::endl;
+
 			IncreaseHealth(restoreAmount);
 		}
 		else
 		{
-			std::cout << "ConsumeEnemy: Enemy is still active!" << std::endl;
+		
 		}
 	}
 }
@@ -411,14 +406,14 @@ void Player::OnCollisionWithEnemy(Enemy* enemy)
 	// 적의 타입이 섭취 가능한지 확인
 	if (CanCatchEnemy(enemy->GetType()))
 	{
-		std::cout << "OnCollisionWithEnemy: Consuming enemy." << std::endl;
+
 		ConsumeEnemy(enemy);
 	}
 	else
 	{
 		// 적이 섭취 불가능한 경우 플레이어에게 피해
 		int damage = enemy->GetDamage();
-		std::cout << "OnCollisionWithEnemy: Taking damage from enemy. Damage: " << damage << std::endl;
+
 		OnDamage(damage);
 
 		// 적을 비활성화
