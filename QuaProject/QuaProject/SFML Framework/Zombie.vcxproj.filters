@@ -88,6 +88,7 @@
     <ClCompile Include="SleepMovement.cpp" />
     <ClCompile Include="Wave.cpp" />
     <ClCompile Include="UiHealthBar.cpp" />
+    <ClCompile Include="Framework\AniPlayer3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\SpawnArea.hpp">
@@ -198,6 +199,7 @@
     <ClInclude Include="SleepMovement.h" />
     <ClInclude Include="Wave.h" />
     <ClInclude Include="UiHealthBar.h" />
+    <ClInclude Include="Framework\AniPlayer3.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">

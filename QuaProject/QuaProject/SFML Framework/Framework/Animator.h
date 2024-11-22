@@ -86,5 +86,6 @@ public:
 			return "";
 		return currentClip->id;
 	}
+
 };
 

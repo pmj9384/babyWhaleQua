@@ -88,6 +88,8 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
+	UpdateAnimation(dt); //animation
+
 	direction.x = InputMgr::GetAxis(Axis::Horizontal);
 	direction.y = InputMgr::GetAxis(Axis::Vertical);
 	float mag = Utils::Magnitude(direction);
@@ -100,6 +102,25 @@ void Player::Update(float dt)
 		SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
 	}
 
+	// 애니메이션 상태 처리
+	if (recoveryTimer > 0.f) 
+	{
+		recoveryTimer -= dt;
+		if (recoveryTimer <= 0.f) 
+		{
+			recoveryTimer = 0.f; // Eat 상태 종료
+		}
+	}
+	if (recoveryTimer <= 0.f) {
+		if (direction.x != 0.f || direction.y != 0.f)
+		{
+			PlayState("Run"); // 이동 중이면 "Run"
+		}
+		else
+		{
+			PlayState("Idle"); // 정지 상태면 "Idle"
+		}
+	}
 	if (isInvincible)
 	{
 		invincibleTimer -= dt;
@@ -138,21 +159,10 @@ void Player::AttackEnemy(Enemy* enemy)
 {
 	if (enemy != nullptr && enemy->IsActive())
 	{
-		//// 현재 적이 이미 처리된 적인지 확인
-		//if (processedEnemies.find(enemy) != processedEnemies.end())
-		//{
-		//	std::cout << "AttackEnemy: Already processed this enemy. Ignoring." << std::endl;
-		//	return;
-		//}
-
-		// 적에게 데미지 전달
-		//enemy->OnDamage(attackDamage);
-
 		// 적을 잡을 수 있다면 체력 회복
 		if (CanCatchEnemy(enemy->GetType()))
 		{
 			enemy->OnDamage(attackDamage);
-	
 			int restoreAmount = enemy->GetHealthRestore();
 			IncreaseHealth(restoreAmount);  // 체력 회복
 
@@ -162,14 +172,10 @@ void Player::AttackEnemy(Enemy* enemy)
 				sceneGame->OnEnemyDefeated(enemy->GetType());
 			}
 			enemy->SetActive(false);
+
+			PlayState("Eat");
+			recoveryTimer = eatAnimationDuration; //먹는 애니메이션 시간
 		}
-
-		// 적을 비활성화
-		//enemy->SetActive(false);
-
-		//// 처리된 적을 집합에 추가
-		//processedEnemies.insert(enemy);
-
 		// 마지막으로 처리한 적 갱신
 		lastCollidedEnemy = enemy;
 	}
@@ -381,6 +387,60 @@ void Player::ChangeTexture(const std::string& textureId)
 		const sf::Texture& tex = TEXTURE_MGR.Get(textureId); // 
 		body.setTexture(tex);
 		body.setTextureRect({ 0, 0, (int)tex.getSize().x, (int)tex.getSize().y });
+	}
+}
+
+void Player::SetLevel(int level)
+{
+	std::string filePath = "animations/QuaLevel" + std::to_string(level) + ".csv";
+
+	try {
+		rapidcsv::Document doc(filePath);
+		stateTextures.clear();
+
+		for (size_t i = 0; i < doc.GetRowCount(); ++i) {
+			std::string state = doc.GetCell<std::string>(0, i);       // 상태 (Idle, Run 등)
+			std::string texturePath = doc.GetCell<std::string>(1, i); // 텍스처 경로
+			stateTextures[state].push_back(texturePath);
+		}
+
+		PlayState("Idle"); // 초기 상태를 Idle로 설정
+	}
+	catch (const std::exception& e) {
+		std::cerr << "[ERROR] Failed to load CSV for level " << level << ": " << e.what() << std::endl;
+	}
+}
+
+void Player::PlayState(const std::string& state)
+{
+	if (currentState != state) {
+		currentState = state;
+		currentFrame = 0;
+		animationTimer = 0.f;
+
+		if (!stateTextures[state].empty()) {
+			const sf::Texture& texture = TEXTURE_MGR.Get(stateTextures[state][0]);
+			body.setTexture(texture);
+	
+			body.setTextureRect({ 0, 0, (int)texture.getSize().x, (int)texture.getSize().y });
+		}
+	}
+}
+
+void Player::UpdateAnimation(float dt)
+{
+	animationTimer += dt;
+
+	if (animationTimer >= animationInterval) {
+		animationTimer = 0.f;
+
+		const auto& textures = stateTextures[currentState];
+		if (!textures.empty()) {
+			currentFrame = (currentFrame + 1) % textures.size();
+			const sf::Texture& texture = TEXTURE_MGR.Get(textures[currentFrame]);
+			body.setTexture(texture);
+			body.setTextureRect({ 0, 0, (int)texture.getSize().x, (int)texture.getSize().y });
+		}
 	}
 }
 

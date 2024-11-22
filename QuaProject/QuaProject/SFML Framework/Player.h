@@ -40,6 +40,14 @@ protected:
 	Enemy* lastCollidedEnemy = nullptr;
 	HitBox* hitBox;
 
+	std::unordered_map<std::string, std::vector<std::string>> stateTextures;
+	std::string currentState;
+
+	float animationTimer = 0.f;
+	float animationInterval = 0.2f; // 애니메이션 프레임 간격
+	size_t currentFrame = 0;
+	float recoveryTimer = 0.f;           // "Eat" 상태에서 원래 상태로 돌아가기 위한 타이머
+	const float eatAnimationDuration = 1.0f;
 	//sf::Sprite body;
 public:
 	//std::unordered_set<Enemy*> processedEnemies;  // 이미 처리된 적을 저장할 집합
@@ -83,5 +91,8 @@ public:
 	//void IncreaseSpeed(float amount);        // 이동 속도 증가
 	//void IncreaseMaxHealth(int amount);      // 최대 체력 증가
 
+	void SetLevel(int level); // 레벨에 따른 애니메이션 초기화
+	void PlayState(const std::string& state); // 상태 전환
+	void UpdateAnimation(float dt); // 애니메이션 업데이트
 
 };

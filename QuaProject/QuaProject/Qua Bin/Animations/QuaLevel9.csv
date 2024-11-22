@@ -1,0 +1,7 @@
+ID,TEXTURE PATH
+Idle,graphics/images/182.png
+Run,graphics/images/184.png
+Run,graphics/images/182.png
+Eat,graphics/images/186.png
+Hit,graphics/images/188.png
+Die,graphics/images/190.png

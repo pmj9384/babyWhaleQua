@@ -95,6 +95,7 @@ void Animator::PlayQueue(const std::string& clipId)
 void Animator::Stop()
 {
 	isPlaying = false;
+
 }
 
 void Animator::SetFrame(const AnimationFrame& frame)

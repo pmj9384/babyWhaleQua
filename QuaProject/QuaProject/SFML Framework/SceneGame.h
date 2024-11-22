@@ -6,12 +6,14 @@
 #include "Wave.h"
 #include "UiHealthBar.h"
 #include "UiHud.h"
+#include "Aniplayer3.h"
 
 class Player;
 class Enemy;
 class Wave;
 class UiHealthBar;
 class UiHud;
+class AniPlayer3;
 
 class SceneGame : public Scene {
 	friend class Enemy;
@@ -22,6 +24,7 @@ protected:
 	UiHealthBar* uiHealthbar;
 	Wave* wave;
 	Enemy* enemy;
+	AniPlayer3* aniPlayer3;
 	int playerLevel = 1;
 
 	UiHud* uiHud;

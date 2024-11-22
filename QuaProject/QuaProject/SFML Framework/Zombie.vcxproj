@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\AniPlayer3.cpp" />
     <ClCompile Include="Framework\AniPlayer.cpp" />
     <ClCompile Include="Framework\AniPlayer2.cpp" />
     <ClCompile Include="ChaseMovement.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\AniPlayer3.h" />
     <ClInclude Include="Framework\AniPlayer.h" />
     <ClInclude Include="Framework\AniPlayer2.h" />
     <ClInclude Include="ChaseMovement.h" />

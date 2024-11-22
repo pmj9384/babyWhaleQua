@@ -5,6 +5,8 @@
 #include "wave.h"
 #include "UiHealthBar.h"
 #include "UiHud.h"
+#include "AniPlayer3.h"
+
 
 SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
@@ -30,6 +32,7 @@ void SceneGame::Init()
 	this->player = player;
 
 	SetPlayerLevel(1);
+
 	uiHud = AddGo(new UiHud("UiHud"));
 	if (uiHud)
 	{
@@ -126,6 +129,7 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	//player->Update(dt);
+
 	sf::Vector2i mousePos = InputMgr::GetMousePosition();
 	sf::Vector2f worldMousePos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePos, uiView);  
 
@@ -414,67 +418,67 @@ void SceneGame::SetPlayerLevel(int level)
 	{
 	case 1:
 		allowedTypes = { Enemy::Types::smallFish }; // 레벨 1에서는 smallFish만 잡을 수 있음
-		textureId = "graphics/images/91.png";
+	//	textureId = "graphics/images/91.png";
 		levelImageId = "graphics/images/36.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
 		break;
 	case 2:
 		allowedTypes = { Enemy::Types::smallFish };
-		textureId = "graphics/images/105.png";
+	//	textureId = "graphics/images/105.png";
 		levelImageId = "graphics/images/38.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission1.png";
 		break;
 	case 3:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
-		textureId = "graphics/images/116.png";
+	//	textureId = "graphics/images/116.png";
 		levelImageId = "graphics/images/40.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
 		break;
 	case 4:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish };
-		textureId = "graphics/images/127.png";
+	//	textureId = "graphics/images/127.png";
 		levelImageId = "graphics/images/42.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission2.png";
 
 		break;
 	case 5:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
-		textureId = "graphics/images/138.png";
+	//	textureId = "graphics/images/138.png";
 		levelImageId = "graphics/images/44.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
 
 		break;
 	case 6:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
-		textureId = "graphics/images/149.png";
+	//	textureId = "graphics/images/149.png";
 		levelImageId = "graphics/images/46.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
 
 		break;
 	case 7:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish };
-		textureId = "graphics/images/160.png";
+	//	textureId = "graphics/images/160.png";
 		levelImageId = "graphics/images/48.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission3.png";
 
 		break;
 	case 8:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-		textureId = "graphics/images/171.png";
+	//	textureId = "graphics/images/171.png";
 		levelImageId = "graphics/images/50.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
 
 		break;
 	case 9:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-		textureId = "graphics/images/182.png";
+	//	textureId = "graphics/images/182.png";
 		levelImageId = "graphics/images/52.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
 
 		break;
 	case 10:
 		allowedTypes = { Enemy::Types::smallFish, Enemy::Types::redFish, Enemy::Types::buleFish,Enemy::Types::purpleFish };
-		textureId = "graphics/images/193.png";
+	//	textureId = "graphics/images/193.png";
 		levelImageId = "graphics/images/54.png";
 		missionTextureId = "graphics/sprites/UiEnermybar_89/mission4.png";
 		break;
@@ -484,21 +488,21 @@ void SceneGame::SetPlayerLevel(int level)
 	}
 
 	player->SetAllowedEnemyTypes(allowedTypes);
-	player->ChangeTexture(textureId);
-
+	// AniPlayer3의 SetLevel 호출로 텍스처 설정 및 초기화
+	if (player) 
+	{
+		player->SetLevel(level);
+		std::cout << "[DEBUG] Player level set to " << level << std::endl;
+	}
 	GameObject* levelNum = FindGo("LevelNumber");
 	if (levelNum)
 	{
 		levelNum->SetTexture(TEXTURE_MGR.Get(levelImageId));
-		std::cout << "[DEBUG] LevelNumber Active: " << levelNum->IsActive() << std::endl;
-		std::cout << "[DEBUG] LevelNumber Texture: " << levelImageId << std::endl;
 	}
 	GameObject* missionUi = FindGo("MissionUi");
 	if (missionUi)
 	{
 		missionUi->SetTexture(TEXTURE_MGR.Get(missionTextureId));
-		std::cout << "[DEBUG] MissionUi Active: " << missionUi->IsActive() << std::endl;
-		std::cout << "[DEBUG] MissionUi Texture: " << missionTextureId << std::endl;
 	}
 	
 }
