@@ -1,6 +1,6 @@
 ID(0: smallFish 1: redFish 2: blueFish 3: purpleFish 4: shark),TEXTUREID,SPEED,DAMAGE,HEALTH_RESTORE
 0,graphics/images/2.png,60,100,0
-1,graphics/images/11.png,50,5,10
-2,graphics/images/13.png,80,10,20
-3,graphics/images/18.png,70,10,25
-4,graphics/images/25.png,100,10,30       
+1,graphics/images/11.png,50,0,3
+2,graphics/images/13.png,80,20,5
+3,graphics/images/18.png,70,30,7
+4,graphics/images/25.png,100,40,8    

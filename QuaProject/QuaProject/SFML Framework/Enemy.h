@@ -34,7 +34,7 @@ protected:
 	int damage = 0;
 	float attackInterval = 0.f;
 	int hp = 100;
-	float healthRestore;
+	int healthRestore = 0;
 	bool isActive = true;
 	bool canAttack = true;
 	float attackTimer = 0.f;

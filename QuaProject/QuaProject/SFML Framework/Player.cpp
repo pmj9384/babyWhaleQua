@@ -171,13 +171,13 @@ void Player::Update(float dt)
 	if (healthDecreaseTimer >= decreaseInterval)
 	{
 		healthDecreaseTimer -= decreaseInterval; // 타이머 초기화
-		OnDamage(5); // 체력 1 감소
+		OnDamage(2); // 체력 2 감소
 	}
 
 	SetPosition(position + direction * speed * dt);
 	debugBox.SetBounds(body.getGlobalBounds());
 	UpdateHealthBar();
-	speed = 500.f;
+	speed = 400.f;
 }
 
 void Player::Draw(sf::RenderWindow& window)
