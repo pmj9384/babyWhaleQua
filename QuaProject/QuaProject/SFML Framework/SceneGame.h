@@ -24,6 +24,7 @@ protected:
 	UiHealthBar* uiHealthbar;
 	Wave* wave;
 	Enemy* enemy;
+	Item* item;
 	AniPlayer3* aniPlayer3;
 	int playerLevel = 1;
 
@@ -37,8 +38,7 @@ protected:
 
 	Wave* currentWave;
 	float itemSpawnTimer = 0.0f;
-	//float itemSpawnInterval = 20.0f;
-	float itemSpawnInterval = 5.0f;
+	float itemSpawnInterval = 20.0f;
 	
 	float spawnTimer = 0.0f;
 	float spawnInterval = 0.5f;

@@ -153,6 +153,14 @@ void SceneGame::Update(float dt)
 					enemy->Reset();
 				if (uiHealthbar)
 					uiHealthbar->Reset();
+				if (item)
+					item->Reset();
+
+				for (auto& item : items)
+				{
+					item->SetActive(false); // 적 비활성화
+				}
+				items.clear();
 				for (auto& enemy : enemys)
 				{
 					enemy->SetActive(false); // 적 비활성화
@@ -187,6 +195,15 @@ void SceneGame::Update(float dt)
 					enemy->Reset();
 				if (uiHealthbar)
 					uiHealthbar->Reset();
+				if (item)
+					item->Reset();
+
+				for (auto& item : items)
+				{
+					item->SetActive(false); // 적 비활성화
+				}
+				items.clear();
+			
 				for (auto& enemy : enemys)
 				{
 					enemy->SetActive(false); // 적 비활성화
