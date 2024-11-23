@@ -11,7 +11,7 @@ protected:
 	sf::Text textHighScore;
 
 	sf::Sprite iconAmmoIcon;
-
+	sf::Sprite 	iconGameDoum;
 	sf::Sprite iconGameOver;
 	sf::Sprite iconGameClear;
 	sf::Sprite MainWindow;
@@ -30,7 +30,7 @@ protected:
 	HitBox buttonHitBox2;
 	HitBox buttonHitBox3;
 	HitBox buttonHitBox4;
-
+	HitBox buttonHitBox5;
 
 
 	//bool isGameOverVisible;
@@ -41,7 +41,7 @@ protected:
 	float buttonHeight = 50.f;
 
 public:
-
+	bool isGameDoumVisible = false;
 	bool isGameClearVisible = true;
 	bool isMainWindowVisible = true;
 	bool isGameOverVisible = true;

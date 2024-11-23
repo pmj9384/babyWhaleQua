@@ -87,8 +87,10 @@ void UiHud::Reset()
 	Utils::SetOrigin(iconGameOver, Origins::MC);
 
 	iconGameClear.setTexture(TEXTURE_MGR.Get("graphics/sprites/AllClear_221/10.png"));
-	//Utils::SetOrigin(iconGameClear, Origins::MC);
+	Utils::SetOrigin(iconGameClear, Origins::MC);
 
+	iconGameDoum.setTexture(TEXTURE_MGR.Get("graphics/sprites/Doum_64/9.png"));
+	Utils::SetOrigin(iconGameClear, Origins::MC);
 
 	MainWindow.setTexture(TEXTURE_MGR.Get("graphics/frames/main.png"));
 	Utils::SetOrigin(MainWindow, Origins::MC);
@@ -103,33 +105,37 @@ void UiHud::Reset()
 //	iconAmmoIcon.setPosition(25.f, BottomY);
 
 	iconGameOver.setPosition(500.f, 500.f);
-	iconGameOver.setScale({ 1.5f,1.5f });
+	iconGameOver.setScale({ 1.0f,1.0f });
 
 
-	iconGameClear.setPosition(280.f, 80.f);
-	iconGameClear.setScale({ 1.3f,2.3f });
+	iconGameClear.setPosition(500.f, 500.f);
+	iconGameClear.setScale({ 1.0f,1.0f });
 
 
 	MainWindow.setPosition(500.f, 500.f);
 	MainWindow.setScale({ 0.5f,0.7f });
 	
-
+	iconGameDoum.setPosition(450.f, 200.f);
+	iconGameDoum.setScale({ 0.8f,0.8f });
 
 	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };
 	buttonHitBox.UpdateTr(MainWindow, buttonArea);
 	buttonHitBox.SetVisible(false);
 
+	sf::FloatRect buttonArea5 = { 520.f, 950.f, 350.f, 120.f };
+	buttonHitBox5.UpdateTr(MainWindow, buttonArea5);
+	buttonHitBox5.SetVisible(false);
 
-	sf::FloatRect buttonArea2 = { 30.f, 85.f, 80.f, 40.f };
+	sf::FloatRect buttonArea2 = { 40.f, 125.f, 150.f, 60.f };
 	buttonHitBox2.UpdateTr(iconGameOver, buttonArea2);
 	buttonHitBox2.SetVisible(false);
 
-	sf::FloatRect buttonArea3 = { 180.f, 85.f, 80.f, 40.f };
+	sf::FloatRect buttonArea3 = { 240.f, 125.f, 150.f, 60.f };
 	buttonHitBox3.UpdateTr(iconGameOver, buttonArea3);
 	buttonHitBox3.SetVisible(false);
 
 
-	sf::FloatRect buttonArea4 = { 300.f, 687.f, 80.f, 30.f };
+	sf::FloatRect buttonArea4 = { 450.f, 587.f, 180.f, 80.f };
 	buttonHitBox4.UpdateTr(iconGameClear, buttonArea4);
 	buttonHitBox4.SetVisible(false);
 
@@ -170,18 +176,23 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(iconGameOver);
 		buttonHitBox2.Draw(window);
 		buttonHitBox3.Draw(window);
-
 	}
+
 	if (isMainWindowVisible) // MainWindow의 가시성 확인
 	{
 		window.draw(MainWindow);
 		buttonHitBox.Draw(window);
+		buttonHitBox5.Draw(window);
 	}
 	if (isGameClearVisible)
 	{
 		window.draw(iconGameClear);
 		buttonHitBox4.Draw(window);
 
+	}
+	if (isGameDoumVisible)
+	{
+		window.draw(iconGameDoum);
 	}
 }
 
@@ -232,7 +243,7 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	if (buttonHitBox.IsMouseOver(mousePos))
 	{
 		isMainWindowVisible = false;  // MainWindow 비활성화
-
+		isGameDoumVisible = false;
 		return true;
 	}
 
@@ -255,6 +266,11 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 		isGameClearVisible = false;  // GameOver UI 비활성화
 		isMainWindowVisible = true;
 
+		return true;
+	}
+	if (buttonHitBox5.IsMouseOver(mousePos))
+	{
+		isGameDoumVisible = true;
 		return true;
 	}
 	return false;
