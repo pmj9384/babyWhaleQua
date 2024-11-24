@@ -31,6 +31,9 @@ void HitBox::Draw(sf::RenderWindow& window)
 
 bool HitBox::IsMouseOver(const sf::Vector2f& mousePos)
 {
+	if (!isActive) {
+		return false;
+	}
 	return rect.getGlobalBounds().contains(mousePos);
 }
 
@@ -48,4 +51,14 @@ bool HitBox::GetVisible() const
 sf::FloatRect HitBox::GetGlobalBounds() const
 {
 	return rect.getGlobalBounds();
+}
+
+void HitBox::SetActive(bool active)
+{
+	isActive = active;
+}
+
+bool HitBox::GetActive() const
+{
+	return isActive;
 }

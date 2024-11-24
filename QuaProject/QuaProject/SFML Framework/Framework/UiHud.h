@@ -40,6 +40,7 @@ protected:
 	float buttonWidth = 200.f;
 	float buttonHeight = 50.f;
 
+
 public:
 	bool isGameDoumVisible = false;
 	bool isGameClearVisible = true;
@@ -61,6 +62,7 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 
+	
 	void SetScore(int s);
 	void SetHiScore(int s);
 	void SetAmmo(int current, int total);

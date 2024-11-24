@@ -121,24 +121,26 @@ void UiHud::Reset()
 	sf::FloatRect buttonArea = { 330.f, 950.f, 350.f, 120.f };
 	buttonHitBox.UpdateTr(MainWindow, buttonArea);
 	buttonHitBox.SetVisible(false);
+	buttonHitBox.SetActive(false);
 
 	sf::FloatRect buttonArea5 = { 520.f, 950.f, 350.f, 120.f };
 	buttonHitBox5.UpdateTr(MainWindow, buttonArea5);
 	buttonHitBox5.SetVisible(false);
+	buttonHitBox5.SetActive(false);
 
 	sf::FloatRect buttonArea2 = { 40.f, 125.f, 150.f, 60.f };
 	buttonHitBox2.UpdateTr(iconGameOver, buttonArea2);
 	buttonHitBox2.SetVisible(false);
-
+	buttonHitBox2.SetActive(false);
 	sf::FloatRect buttonArea3 = { 240.f, 125.f, 150.f, 60.f };
 	buttonHitBox3.UpdateTr(iconGameOver, buttonArea3);
 	buttonHitBox3.SetVisible(false);
-
+	buttonHitBox3.SetActive(false);
 
 	sf::FloatRect buttonArea4 = { 450.f, 587.f, 180.f, 80.f };
 	buttonHitBox4.UpdateTr(iconGameClear, buttonArea4);
 	buttonHitBox4.SetVisible(false);
-
+	buttonHitBox4.SetActive(false);
 //	gaugeHp.setPosition(300.f, BottomY);
 
 //	textAmmo.setPosition(100.f, BottomY);
@@ -148,6 +150,7 @@ void UiHud::Reset()
 
 	isGameOverVisible = false;
 	isGameClearVisible = false;
+	//isMainWindowVisible = true;
 	SetScore(0);
 //	SetHiScore(0);
 //	SetAmmo(0, 0);
@@ -174,8 +177,11 @@ void UiHud::Draw(sf::RenderWindow& window)
 	if (isGameOverVisible)
 	{
 		window.draw(iconGameOver);
+
 		buttonHitBox2.Draw(window);
 		buttonHitBox3.Draw(window);
+		buttonHitBox2.SetActive(true);  // 버튼 활성화
+		buttonHitBox3.SetActive(true);  // 버튼 활성화
 	}
 
 	if (isMainWindowVisible) // MainWindow의 가시성 확인
@@ -183,11 +189,14 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(MainWindow);
 		buttonHitBox.Draw(window);
 		buttonHitBox5.Draw(window);
+		buttonHitBox.SetActive(true);  // 버튼 활성화
+		buttonHitBox5.SetActive(true);  // 버튼 활성화
 	}
 	if (isGameClearVisible)
 	{
 		window.draw(iconGameClear);
 		buttonHitBox4.Draw(window);
+		buttonHitBox4.SetActive(true);  // 버튼 활성화
 
 	}
 	if (isGameDoumVisible)
