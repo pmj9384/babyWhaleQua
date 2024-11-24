@@ -40,6 +40,7 @@ void SceneGame::Init()
 		uiHud->SetScore(0); 
 	}
 	currentScore = 0; // SceneGame에서 점수 관리
+	//currentWave->SetUiHud(uiHud);
 
 	GameObject* levelNum = AddGo( new SpriteGo("graphics/images/36.png", "LevelNumber"));
 	levelNum->sortingLayer = SortingLayers::UI;
@@ -272,6 +273,7 @@ void SceneGame::Update(float dt)
 			playerLevel++; // 플레이어 레벨 증가
 			SetPlayerLevel(playerLevel); // 플레이어 레벨에 따라 적 허용 타입 설정
 			currentWave->Reset();
+
 			// 다음 웨이브 타입 설정
 			Wave::Types nextWaveType = static_cast<Wave::Types>(playerLevel);
 			if (nextWaveType <= Wave::Types::Wave10) // 최대 웨이브 확인

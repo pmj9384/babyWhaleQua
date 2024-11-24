@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "UiHud.h"
 #include "Enemy.h"
+#include "Wave.h"
+
 UiHud::UiHud(const std::string& name)
 	: GameObject(name)
 {
@@ -48,7 +50,7 @@ void UiHud::Release()
 
 void UiHud::Reset()
 {
-
+	
 	float textSize = 50.f;
 	sf::Font& font = FONT_MGR.Get("fonts/malgunbd.ttf");
 	textScore.setFont(font);
@@ -96,6 +98,7 @@ void UiHud::Reset()
 	Utils::SetOrigin(MainWindow, Origins::MC);
 	sf::Vector2f size = FRAMEWORK.GetWindowSizeF();
 
+
 	float topY = 10.f;
 	float BottomY = size.y - 25.f;
 
@@ -141,6 +144,7 @@ void UiHud::Reset()
 	buttonHitBox4.UpdateTr(iconGameClear, buttonArea4);
 	buttonHitBox4.SetVisible(false);
 	buttonHitBox4.SetActive(false);
+
 //	gaugeHp.setPosition(300.f, BottomY);
 
 //	textAmmo.setPosition(100.f, BottomY);
@@ -157,6 +161,7 @@ void UiHud::Reset()
 //	SetHp(1.f, 1.f);
 //	SetWave(0);
 //	SetZombieCount(0);
+
 }
 
 void UiHud::Update(float dt)
@@ -308,6 +313,10 @@ void UiHud::HandleEvent(const sf::Event& event)
 			isMainWindowVisible = false; // MainWindow를 비활성화
 		}
 	}
+}
+
+void UiHud::UpdateTargetKillText(Enemy::Types type, int remaining)
+{
 }
 
 void UiHud::ShowGameOver(bool show)

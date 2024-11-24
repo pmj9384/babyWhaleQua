@@ -97,6 +97,6 @@ public:
 	void OnWaveComplete();
 
 	void RemoveEnemy(Enemy* enemy);
-
+	Wave* GetWave() const { return currentWave; }
 };
 

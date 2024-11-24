@@ -23,6 +23,7 @@ protected:
 	sf::Text textZombieCount;
 	
 	sf::Vector2f gaugeHpMaxSize = { 400.f, 50.f };
+
 	int currentScore = 0;
 
 	
@@ -32,6 +33,9 @@ protected:
 	HitBox buttonHitBox4;
 	HitBox buttonHitBox5;
 
+	std::map<Enemy::Types, sf::Text> targetKillTexts; // 적 처치 목표 텍스트
+	Wave* wave;
+	SceneGame* sceneGame;
 
 	//bool isGameOverVisible;
 	float windowWidth = 1920.f;
@@ -76,4 +80,5 @@ public:
 	bool IsButtonClicked(const sf::Vector2f& mousePos);
 	void HandleEvent(const sf::Event& event);
 
+	void UpdateTargetKillText(Enemy::Types type, int remaining); // 텍스트 업데이트 함수
 };

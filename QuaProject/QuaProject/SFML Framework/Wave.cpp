@@ -87,6 +87,8 @@ void Wave::SetType(Types wavetype)
         break;
     default:
         break;
+
+
     }
 }
 
@@ -164,8 +166,8 @@ void Wave::AddTargetToKill(Enemy::Types type, int count)
     }
     else
     {
+     
     }
-    
 }
 
 void Wave::EnemyKilled(Enemy::Types type)
@@ -179,6 +181,7 @@ void Wave::EnemyKilled(Enemy::Types type)
     else
     {
     }
+
 }
 
 bool Wave::CanSpawnEnemy() const
@@ -199,5 +202,24 @@ Enemy::Types Wave::GetRandomTargetType() const
 
     int randomIndex = Utils::RandomRange(0, spawnableTypes.size() - 1);
     return spawnableTypes[randomIndex];
+}
+
+void Wave::OnEnemyDefeated(Enemy::Types type)
+{
+    if (targetsToKill.find(type) != targetsToKill.end())
+    {
+        targetsToKill[type]--; // 목표 수 감소
+
+        if (targetsToKill[type] <= 0)
+        {
+            targetsToKill.erase(type); // 목표 완료 시 제거
+        }
+
+        // UI 갱신
+        if (uiHud != nullptr)
+        {
+            uiHud->Reset(); // Reset 호출로 UI 갱신
+        }
+    }
 }
 

@@ -36,6 +36,7 @@ protected:
 	std::map<Enemy::Types, int> targetsToKill;  // 적 타입별 목표 수
 	std::map<Enemy::Types, int> enemiesKilled; // 적 타입별 처치된 수
 	std::vector<Enemy::Types> spawnableTypes;
+
 public:
 	Wave();
 	virtual ~Wave() = default;
@@ -62,10 +63,14 @@ public:
 	void AddTargetToKill(Enemy::Types type, int count);
 	void EnemyKilled(Enemy::Types type);
 
+	const std::map<Enemy::Types, int>& GetTargetsToKill() const { return targetsToKill; }
+	std::map<Enemy::Types, std::string> GetTargetKillTexts() const;
 	bool CanSpawnEnemy() const;
 	void IncrementSpawnedEnemies();
 	void SetUiHud(UiHud* hud) { uiHud = hud; }
 
 	Enemy::Types GetRandomTargetType() const;
+
+	void OnEnemyDefeated(Enemy::Types type);
 };
 
