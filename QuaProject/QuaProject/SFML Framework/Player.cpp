@@ -365,7 +365,7 @@ void Player::OnPickup(Item* item)
 	invincibleTimer = invincibleDuration;
 
 	body.setColor(sf::Color(255, 255, 255, 128));
-
+	SOUND_MGR.PlaySfx("graphics/sounds/71_s_item.mp3", false);
 }
 
 void Player::SetAllowedEnemyTypes(const std::vector<Enemy::Types>& types)

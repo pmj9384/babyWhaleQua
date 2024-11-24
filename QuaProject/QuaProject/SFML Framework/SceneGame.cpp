@@ -281,7 +281,8 @@ void SceneGame::Update(float dt)
 			}
 			else
 			{
-
+				SOUND_MGR.StopAllSfx();
+				SOUND_MGR.PlayBgm("graphics/sounds/72_s_ending.mp3", true);
 				//currentWave = nullptr; // 게임 종료 상태로 전환
 				isPaused =true;
 				uiHud->isGameClearVisible = true;

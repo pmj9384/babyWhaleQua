@@ -93,6 +93,7 @@ void ChaseMovement::Update(float dt, Enemy* enemy, Player* player)
     {
         if (currentState != "Eat")
         {
+            SOUND_MGR.PlaySfx("graphics/sounds/67_s_shark1.mp3", false);
             PlayState("Eat", enemy);
         }
         return;

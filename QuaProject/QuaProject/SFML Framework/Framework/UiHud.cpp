@@ -256,7 +256,6 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 		if (!isBgmPlaying) // BGM이 재생 중이 아닌 경우
 		{
 			SOUND_MGR.PlayBgm("graphics/sounds/77_s_bg.mp3", true);
-			std::cout << "BGM started playing." << std::endl;
 			isBgmPlaying = true; // BGM 상태를 true로 전환
 		}
 		return true;
@@ -266,21 +265,26 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	if (buttonHitBox2.IsMouseOver(mousePos))
 	{
 		isGameOverVisible = false;  // GameOver UI 비활성화
-
+		SOUND_MGR.PlayBgm("graphics/sounds/77_s_bg.mp3", true);
+		SOUND_MGR.StopAllSfx();
 		return true;
 	}
 	if (buttonHitBox3.IsMouseOver(mousePos))
 	{
 		isGameOverVisible = false;  // GameOver UI 비활성화
 		isMainWindowVisible = true;
+		SOUND_MGR.StopAllSfx();
 
+		isBgmPlaying = false;
 		return true;
 	}
 	if (buttonHitBox4.IsMouseOver(mousePos))
 	{
-		isGameClearVisible = false;  // GameOver UI 비활성화
+		isGameClearVisible = false;  // GameClear UI 비활성화
 		isMainWindowVisible = true;
-
+		//SOUND_MGR.PlayBgm("graphics/sounds/72_s_ending.mp3", true);
+		SOUND_MGR.StopAllSfx();
+		isBgmPlaying = false;
 		return true;
 	}
 	if (buttonHitBox5.IsMouseOver(mousePos))
