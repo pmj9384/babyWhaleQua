@@ -253,6 +253,12 @@ bool UiHud::IsButtonClicked(const sf::Vector2f& mousePos)
 	{
 		isMainWindowVisible = false;  // MainWindow 비활성화
 		isGameDoumVisible = false;
+		if (!isBgmPlaying) // BGM이 재생 중이 아닌 경우
+		{
+			SOUND_MGR.PlayBgm("graphics/sounds/77_s_bg.mp3", true);
+			std::cout << "BGM started playing." << std::endl;
+			isBgmPlaying = true; // BGM 상태를 true로 전환
+		}
 		return true;
 	}
 

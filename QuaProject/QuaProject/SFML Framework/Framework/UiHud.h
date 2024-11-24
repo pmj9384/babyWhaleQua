@@ -40,7 +40,7 @@ protected:
 	float buttonWidth = 200.f;
 	float buttonHeight = 50.f;
 
-
+	bool isBgmPlaying = false;
 public:
 	bool isGameDoumVisible = false;
 	bool isGameClearVisible = true;

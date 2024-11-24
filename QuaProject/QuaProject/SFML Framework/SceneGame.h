@@ -7,13 +7,14 @@
 #include "UiHealthBar.h"
 #include "UiHud.h"
 #include "Aniplayer3.h"
-
+#include "SoundMgr.h"
 class Player;
 class Enemy;
 class Wave;
 class UiHealthBar;
 class UiHud;
 class AniPlayer3;
+class SoundMgr;
 
 class SceneGame : public Scene {
 	friend class Enemy;
@@ -25,6 +26,8 @@ protected:
 	Wave* wave;
 	Enemy* enemy;
 	Item* item;
+	SoundMgr* soundMgr;
+
 	AniPlayer3* aniPlayer3;
 	int playerLevel = 1;
 

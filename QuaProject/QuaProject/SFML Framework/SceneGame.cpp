@@ -6,7 +6,7 @@
 #include "UiHealthBar.h"
 #include "UiHud.h"
 #include "AniPlayer3.h"
-
+#include "SoundMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneIds::Game) 
 {
@@ -56,12 +56,13 @@ void SceneGame::Init()
 	missionUi->sortingOrder = -1;
 	missionUi->SetPosition({ 240.0f, windowSize.y - 250.f });
 	missionUi->SetScale({ 0.5f,0.5f });
+	// Sound 관련 초기화 및 BGM 재생
 
-	//if (TEXTURE_MGR.Load("graphics/sprites/UiEnermybar_89/mission1.png"))
-	//{
-	//	missionUi->SetTexture(TEXTURE_MGR.Get("graphics/sprites/UiEnermybar_89/mission1.png"));
-	//}
-
+	
+	SOUNDBUFFER_MGR.Load("graphics/sounds/77_s_bg.mp3", "graphics/sounds/77_s_bg.mp3");
+	//SOUNDBUFFER_MGR.Load("graphics/sounds/77_s_bg.mp3", "graphics/sounds/77_s_bg.mp3");
+	SOUND_MGR.Init(); // SoundMgr 초기화
+	//SOUND_MGR.PlayBgm("graphics/sounds/77_s_bg.mp3", false);
 
 	spawn1.SetPosition( -100.0f, 400.0f);
 	spawn1.SetSize(100.f, backgroundSize.y-700);
@@ -104,6 +105,7 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	TEXTURE_MGR.Load("graphics/images/Background.png");
+
 	Scene::Enter();
 }
 
@@ -394,6 +396,8 @@ void SceneGame::OnPlayerDie(Player* player)
 	{
 		uiHud->ShowGameOver(true); // 게임 오버 아이콘 표시
 	}
+	SOUND_MGR.StopBgm();
+	SOUND_MGR.PlaySfx("graphics/sounds/68_s_over2.mp3", false);
 }
 
 void SceneGame::PauseGame()
