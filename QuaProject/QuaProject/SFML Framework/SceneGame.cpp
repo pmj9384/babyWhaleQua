@@ -268,7 +268,7 @@ void SceneGame::Update(float dt)
 		{
 			// 새로운 웨이브 생성
 			currentWave = new Wave();
-
+			SOUND_MGR.PlaySfx("graphics/sounds/70_s_level.mp3", false);
 			playerLevel++; // 플레이어 레벨 증가
 			SetPlayerLevel(playerLevel); // 플레이어 레벨에 따라 적 허용 타입 설정
 			currentWave->Reset();

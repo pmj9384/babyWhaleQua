@@ -88,20 +88,6 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-	UpdateAnimation(dt); //animation
-
-	direction.x = InputMgr::GetAxis(Axis::Horizontal);
-	direction.y = InputMgr::GetAxis(Axis::Vertical);
-	float mag = Utils::Magnitude(direction);
-	if (mag > 1.f)
-	{
-		Utils::Normalize(direction);
-	}
-	if (direction.x != 0.f)
-	{
-		SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
-	}
-
 	if (isDead)
 	{
 		// 플레이어가 죽은 경우 바닥으로 천천히 이동
@@ -119,6 +105,20 @@ void Player::Update(float dt)
 		SetPosition(position);
 		return; // 죽음 상태에서는 다른 업데이트를 중단
 	}
+	UpdateAnimation(dt); //animation
+
+	direction.x = InputMgr::GetAxis(Axis::Horizontal);
+	direction.y = InputMgr::GetAxis(Axis::Vertical);
+	float mag = Utils::Magnitude(direction);
+	if (mag > 1.f)
+	{
+		Utils::Normalize(direction);
+	}
+	if (direction.x != 0.f)
+	{
+		SetScale(direction.x > 0.f ? sf::Vector2f(1.0f, 1.0f) : sf::Vector2f(-1.f, 1.0f));
+	}
+
 	if (hitRecoveryTimer > 0.f)
 	{
 		hitRecoveryTimer -= dt;
@@ -191,6 +191,10 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::AttackEnemy(Enemy* enemy)
 {
+	if (isDead || enemy == nullptr || !enemy->IsActive())
+	{
+		return; // 죽은 상태이거나 유효하지 않은 적이라면 처리 중단
+	}
 	if (enemy != nullptr && enemy->IsActive())
 	{
 		// 적을 잡을 수 있다면 체력 회복
@@ -205,7 +209,7 @@ void Player::AttackEnemy(Enemy* enemy)
 				sceneGame->OnEnemyDefeated(enemy->GetType());
 			}
 			enemy->SetActive(false);
-
+			SOUND_MGR.PlaySfx("graphics/sounds/73_s_eat3.mp3", false);
 			PlayState("Eat");
 			recoveryTimer = eatAnimationDuration; //먹는 애니메이션 시간
 		}
@@ -267,6 +271,7 @@ void Player::FixedUpdate(float dt)
 			
 				if (!isInvincible)
 				{
+					SOUND_MGR.PlaySfx("graphics/sounds/1_s_bomb2.mp3", false);
 					PlayState("Hit");
 					hitRecoveryTimer = hitAnimationDuration;
 				}
@@ -333,7 +338,10 @@ void Player::OnDamage(int damageAmount)
 		isDead = true;
 		deathTimer = deathDuration;
 		PlayState("Die");
-			sceneGame->OnPlayerDie(this);
+		if (sceneGame)
+		{
+			sceneGame->OnPlayerDie(this); // 죽음 처리 호출
+		}
 	}
 	UpdateHealthBar();
 }
