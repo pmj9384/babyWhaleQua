@@ -238,7 +238,10 @@ void Player::FixedUpdate(float dt)
 	if (sceneGame == nullptr)
 		return;
 
-
+	if (isDead)
+	{
+		return;
+	}
 	const auto& enemyList = sceneGame->GetEnemyList();
 
 	for (auto enemy : enemyList)
